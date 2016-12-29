@@ -4,15 +4,10 @@
 <configuration>
 	<properties resource="application.properties" />
 	<typeAliases>
-		<typeAlias type="kr.or.dgit.bigdata.swmng.util.CoNameTypeHandler"
-			alias="TypeHandler" />
+		
 		<package name="kr.or.dgit.bigdata.swmng.dto" />
 	</typeAliases>
 
-	<typeHandlers>
-		<typeHandler handler="TypeHandler" />
-	</typeHandlers>
-	
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />

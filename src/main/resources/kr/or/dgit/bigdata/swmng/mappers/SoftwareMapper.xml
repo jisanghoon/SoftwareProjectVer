@@ -9,7 +9,7 @@
 		<result property="title" column="title" />
 		<result property="supPrice" column="supPrice" />
 		<result property="sellPrice" column="sellPrice" />
-		<association property="coName" column="coName" javaType="Company"></association>
+		<association property="coName" resultMap="kr.or.dgit.bigdata.swmng.mappers.CompanyMapper.companyResult"/>
 	</resultMap>
 
 	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->

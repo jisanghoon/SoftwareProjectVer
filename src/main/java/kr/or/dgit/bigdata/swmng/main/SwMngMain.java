@@ -2,24 +2,24 @@ package kr.or.dgit.bigdata.swmng.main;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import kr.or.dgit.bigdata.swmng.customersubmenu.AddBuyerPanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.AddCompanyPanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.AddSoftwarePanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.BtnPanel;
+import com.sun.org.apache.regexp.internal.recompile;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
+import kr.or.dgit.bigdata.swmng.customersubmenu.BtnPanel;
+import kr.or.dgit.bigdata.swmng.customersubmenu.ListPanel;
+import kr.or.dgit.bigdata.swmng.customersubmenu.RegisterPanel;
 
 public class SwMngMain extends JFrame implements ActionListener {
 
@@ -27,10 +27,9 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem listCompany;
 	private JMenuItem listSoftware;
 	private JMenuItem listCustomer;
+	ListPanel lp = new ListPanel();
+	private JLabel lblMainTitle;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -44,12 +43,9 @@ public class SwMngMain extends JFrame implements ActionListener {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public SwMngMain() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 556, 300);
+		setBounds(700, 400, 556, 300);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -84,7 +80,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		JLabel lblMainTitle = new JLabel("소프트웨어 판매관리 프로그램");
+		lblMainTitle = new JLabel("소프트웨어 판매관리 프로그램");
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblMainTitle, BorderLayout.CENTER);
@@ -93,24 +89,33 @@ public class SwMngMain extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		contentPane.removeAll();
-		repaint();
+
+		if (e.getActionCommand() == "등록") {
 		
-		if (e.getSource() == listCompany) {
-			contentPane.add(new AddCompanyPanel(), BorderLayout.CENTER);
-			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
-		}
-		if (e.getSource() == listSoftware) {
-			contentPane.add(new AddSoftwarePanel(), BorderLayout.CENTER);
-			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
+			RegisterPanel rp = new RegisterPanel();
+			rp.setVisible(true);
 
+		} else {
+			showList(e.getActionCommand());
 		}
-		if (e.getSource() == listCustomer) {
-			contentPane.add(new AddBuyerPanel(), BorderLayout.CENTER);
-			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
-		}
-
+		contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
 		revalidate();
-		repaint();
+	}
+
+	void showList(String e) {
+		
+		switch (e) {
+		case "공급회사 목록":
+			lp.CompanyListPanel(e);
+			break;
+		case "소프트웨어 목록":
+			lp.CompanyListPanel(e);
+			break;
+		case "고객목록":
+			lp.CompanyListPanel(e);
+			break;
+		}
+		contentPane.add(lp, BorderLayout.CENTER);
 	}
 
 }

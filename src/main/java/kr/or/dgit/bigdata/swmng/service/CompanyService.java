@@ -11,8 +11,8 @@ import kr.or.dgit.bigdata.swmng.util.MybatisSessionFactory;
 
 public class CompanyService implements CompanyMapper<Company> {
 	/**
-	* Logger for this class
-	*/
+	 * Logger for this class
+	 */
 	private static final Logger logger = Logger.getLogger(CompanyService.class);
 
 	private static final CompanyService instance = new CompanyService();
@@ -31,14 +31,12 @@ public class CompanyService implements CompanyMapper<Company> {
 	private CompanyService() {
 	}
 
-	
-
 	@Override
 	public void insertItem(Company item) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("insertItem(Company) - start");
 		}
-		
+
 		SqlSession sqlSession = MybatisSessionFactory.openSession();
 		CompanyMapper<Company> companyDao = sqlSession.getMapper(CompanyMapper.class);
 		try {
@@ -58,7 +56,7 @@ public class CompanyService implements CompanyMapper<Company> {
 		if (logger.isDebugEnabled()) {
 			logger.debug("deleteItem(int) - start");
 		}
-		
+
 		SqlSession sqlSession = MybatisSessionFactory.openSession();
 		CompanyMapper companyDao = sqlSession.getMapper(CompanyMapper.class);
 		try {
@@ -78,7 +76,7 @@ public class CompanyService implements CompanyMapper<Company> {
 		if (logger.isDebugEnabled()) {
 			logger.debug("updateItem(Company) - start");
 		}
-		
+
 		SqlSession sqlSession = MybatisSessionFactory.openSession();
 		CompanyMapper companyDao = sqlSession.getMapper(CompanyMapper.class);
 		try {
@@ -98,7 +96,7 @@ public class CompanyService implements CompanyMapper<Company> {
 		if (logger.isDebugEnabled()) {
 			logger.debug("selectByNo(int) - start");
 		}
-		
+
 		SqlSession sqlSession = MybatisSessionFactory.openSession();
 		CompanyMapper companyDao = sqlSession.getMapper(CompanyMapper.class);
 		try {
@@ -117,13 +115,49 @@ public class CompanyService implements CompanyMapper<Company> {
 		if (logger.isDebugEnabled()) {
 			logger.debug("selectAll() - start");
 		}
-	
+
 		SqlSession sqlSession = MybatisSessionFactory.openSession();
 		CompanyMapper companyDao = sqlSession.getMapper(CompanyMapper.class);
 		try {
 			List<Company> returnList = companyDao.selectAll();
 			if (logger.isDebugEnabled()) {
 				logger.debug("selectAll() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public Company selectMaxNo() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectMaxNo() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		CompanyMapper companyDao = sqlSession.getMapper(CompanyMapper.class);
+		try {
+			Company returnList = (Company) companyDao.selectMaxNo();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectMaxNo() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public List<Company> selectCoName() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectCoName() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		CompanyMapper companyDao = sqlSession.getMapper(CompanyMapper.class);
+		try {
+			List<Company> returnList = companyDao.selectCoName();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectCoName() - end");
 			}
 			return returnList;
 		} finally {

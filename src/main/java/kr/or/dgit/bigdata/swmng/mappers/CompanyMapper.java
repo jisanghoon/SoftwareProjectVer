@@ -12,4 +12,10 @@ public interface CompanyMapper<T> {
 	T selectByNo(int idx);
 
 	List<T> selectAll();
+
+	T selectMaxNo();
+
+	List<T> selectCoName();
+	
+	
 }

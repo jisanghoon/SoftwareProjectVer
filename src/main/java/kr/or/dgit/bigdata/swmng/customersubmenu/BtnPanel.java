@@ -5,7 +5,12 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class BtnPanel extends JPanel {
+import kr.or.dgit.bigdata.swmng.main.SwMngMain;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class BtnPanel extends JPanel implements ActionListener {
 	private JButton btnAdd;
 	private JButton btnEdit;
 	private JButton btnDel;
@@ -16,22 +21,41 @@ public class BtnPanel extends JPanel {
 	 */
 	public BtnPanel() {
 		setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel btnPanel = new JPanel();
 		add(btnPanel, BorderLayout.SOUTH);
-		
+
 		btnAdd = new JButton("등록");
+		btnAdd.addActionListener(this);
 		btnPanel.add(btnAdd);
-		
+
 		btnEdit = new JButton("수정");
+		btnEdit.addActionListener(this);
 		btnPanel.add(btnEdit);
-		
+
 		btnDel = new JButton("삭제");
+		btnDel.addActionListener(this);
 		btnPanel.add(btnDel);
-		
-		btnClose = new JButton("닫기");
-		btnPanel.add(btnClose);
 
 	}
 
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnDel) {
+			actionPerformedBtnDel(e);
+		}
+		if (e.getSource() == btnEdit) {
+			actionPerformedBtnEdit(e);
+		}
+		if (e.getSource() == btnAdd) {
+			SwMngMain smm = new SwMngMain();
+			smm.actionPerformed(e);
+		}
+	}
+
+
+	protected void actionPerformedBtnEdit(ActionEvent e) {
+	}
+
+	protected void actionPerformedBtnDel(ActionEvent e) {
+	}
 }

@@ -9,21 +9,47 @@
 		<result property="title" column="title" />
 		<result property="supPrice" column="supPrice" />
 		<result property="sellPrice" column="sellPrice" />
-		<association property="coName" resultMap="kr.or.dgit.bigdata.swmng.mappers.CompanyMapper.companyResult"/>
+		<association property="coName"
+			resultMap="kr.or.dgit.bigdata.swmng.mappers.CompanyMapper.companyResult" />
 	</resultMap>
 
 	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
 	<select id="selectAll" resultType="Software" resultMap="softwareResult">
-		SELECT s.*, c.* FROM software s, company c 
-		WHERE s.coname=c.coname ORDER BY s.no
+		SELECT
+		s.*, c.* FROM software s, company c
+		WHERE s.coname=c.coname ORDER BY
+		s.no
 	</select>
 
-	<!-- <select id="selectByNo" parameterType="int" resultType="Software"> 
-		SELECT no,category,title,supPrice,sellPrice,coName FROM software WHERE no 
-		= #{no} </select> <delete id="deleteItem" parameterType="int"> DELETE FROM 
-		software WHERE no = #{no} </delete> <select id="insertItem" resultType="Software" 
-		parameterType="Software"> INSERT INTO software VALUES(#{no},#{category},#{title},#{supPrice},#{sellPrice},#{coName}) 
-		</select> <update id="updateItem" parameterType="int"> UPDATE software SET 
-		category=#{category}, title= #{title}, supPrice= #{supPrice}, sellPrice= 
-		#{sellPrice}, coName= #{coName} WHERE no = #{no} </update> -->
+	<select id="selectByNo" parameterType="int" resultType="Software">
+		SELECT
+		no,category,title,supPrice,sellPrice,coName FROM software WHERE no
+		=
+		#{no}
+	</select>
+
+	<select id="selectMaxNo" parameterType="int" resultType="Software">
+		SELECT
+		MAX(no)+1 no FROM software
+	</select>
+
+	<select id="selectCategory" resultType="Software">
+		SELECT DISTINCT category
+		FROM software
+	</select>
+
+	<insert id="insertItem" parameterType="Software">
+		INSERT INTO
+		software(no,category,title,supprice,sellprice,coname)
+		VALUES(#{no},#{category},#{title},#{supPrice},#{sellPrice},#{coName2})
+	</insert>
+
+
+	<delete id="deleteItem" parameterType="int"> 
+	DELETE FROM software WHERE no = #{no}
+	</delete>
+
+	<!-- <update id="updateItem" parameterType="int"> UPDATE software SET category=#{category}, 
+		title= #{title}, supPrice= #{supPrice}, sellPrice= #{sellPrice}, coName= 
+		#{coName} WHERE no = #{no} </update> -->
 </mapper>

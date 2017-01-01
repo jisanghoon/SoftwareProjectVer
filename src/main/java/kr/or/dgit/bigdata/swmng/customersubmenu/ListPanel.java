@@ -2,6 +2,7 @@ package kr.or.dgit.bigdata.swmng.customersubmenu;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,15 +17,21 @@ import kr.or.dgit.bigdata.swmng.service.SoftwareService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
 public class ListPanel extends JPanel {
-	private JTable companyList = new JTable();
+	private static JTable companyList = new JTable();
 	private int idx;
 	String[][] data;
+	private static String title;
+
+	public static String getTitle() {
+		return title;
+	}
 
 	public ListPanel() {
 	}
 
-	public void CompanyListPanel(String e) {
+	public void ListPanel(String e) {
 		if (e.equals("공급회사 목록")) {
+			title = "공급회사";
 			List<Company> list = CompanyService.getInstance().selectAll();
 			String[] COL_NAMES = { "회사번호", "회사명", "주소", "전화번호" };
 			data = new String[list.size()][COL_NAMES.length];
@@ -39,6 +46,7 @@ public class ListPanel extends JPanel {
 			ModelForTable mft = new ModelForTable(data, COL_NAMES);
 			companyList.setModel(mft);
 		} else if (e.equals("소프트웨어 목록")) {
+			title = "소프트웨어";
 			List<Software> list = SoftwareService.getInstance().selectAll();
 			String[] COL_NAMES = { "품목번호", "분류명", "품목명", "공급가격", "판매가격", "공급회사명" };
 			String[][] data = new String[list.size()][COL_NAMES.length];
@@ -55,6 +63,7 @@ public class ListPanel extends JPanel {
 			ModelForTable mft = new ModelForTable(data, COL_NAMES);
 			companyList.setModel(mft);
 		} else {
+			title = "고객";
 			List<Buyer> list = BuyerService.getInstance().selectAll();
 			String[] COL_NAMES = { "등록번호", "상호", "주소", "전화번호" };
 			String[][] data = new String[list.size()][COL_NAMES.length];
@@ -71,6 +80,29 @@ public class ListPanel extends JPanel {
 		}
 		companyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		add(new JScrollPane(companyList));
+	}
+
+	public void deleteAction() {
+		if (companyList.getSelectedRowCount() == 1) {
+			switch (title) {
+			case "공급회사":
+				CompanyService.getInstance()
+						.deleteItem(Integer.parseInt((companyList.getValueAt(companyList.getSelectedRow(), 0) + "")));
+				break;
+			case "소프트웨어":
+				SoftwareService.getInstance()
+						.deleteItem(Integer.parseInt((companyList.getValueAt(companyList.getSelectedRow(), 0) + "")));
+				break;
+			case "고객":
+				BuyerService.getInstance()
+						.deleteItem(Integer.parseInt((companyList.getValueAt(companyList.getSelectedRow(), 0) + "")));
+				break;
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "삭제 할 항목을 선택해 주세요");
+		}
+		
+
 	}
 
 }

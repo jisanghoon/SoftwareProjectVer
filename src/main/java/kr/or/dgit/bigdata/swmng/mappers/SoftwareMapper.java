@@ -12,4 +12,9 @@ public interface SoftwareMapper<T> {
 	T selectByNo(int idx);
 
 	List<T> selectAll();
+
+	T selectMaxNo();
+
+	List<T> selectCategory();
+
 }

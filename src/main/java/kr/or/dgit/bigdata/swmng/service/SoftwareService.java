@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
+import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.dto.Software;
 import kr.or.dgit.bigdata.swmng.mappers.CompanyMapper;
 import kr.or.dgit.bigdata.swmng.mappers.SoftwareMapper;
@@ -19,13 +20,6 @@ public class SoftwareService implements SoftwareMapper<Software> {
 	private static final SoftwareService instance = new SoftwareService();
 
 	public static SoftwareService getInstance() {
-		if (logger.isDebugEnabled()) {
-			logger.debug("getInstance() - start");
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("getInstance() - end");
-		}
 		return instance;
 	}
 
@@ -123,6 +117,44 @@ public class SoftwareService implements SoftwareMapper<Software> {
 			List<Software> returnList = softwareDao.selectAll();
 			if (logger.isDebugEnabled()) {
 				logger.debug("selectAll() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public Software selectMaxNo() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectMaxNo() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		SoftwareMapper softwareDao = sqlSession.getMapper(SoftwareMapper.class);
+		try {
+			Software returnList = (Software) softwareDao.selectMaxNo();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectMaxNo() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+
+
+	@Override
+	public List<Software> selectCategory() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectCategory() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		SoftwareMapper softwareDao = sqlSession.getMapper(SoftwareMapper.class);
+		try {
+			List<Software> returnList = softwareDao.selectCategory();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectCategory() - end");
 			}
 			return returnList;
 		} finally {

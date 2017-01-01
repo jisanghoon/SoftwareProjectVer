@@ -29,6 +29,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem listCustomer;
 	ListPanel lp = new ListPanel();
 	private JLabel lblMainTitle;
+	RegisterPanel rp = new RegisterPanel();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -86,15 +87,19 @@ public class SwMngMain extends JFrame implements ActionListener {
 		contentPane.add(lblMainTitle, BorderLayout.CENTER);
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		contentPane.removeAll();
-
-		if (e.getActionCommand() == "등록") {
-		
-			RegisterPanel rp = new RegisterPanel();
+		if (e.getActionCommand() == "등록" && lp.getTitle().equals("공급회사")) {
+			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);
-
+		} else if (e.getActionCommand() == "등록" && lp.getTitle().equals("소프트웨어")) {
+			rp.createRegisterPanel(lp.getTitle());
+			rp.setVisible(true);
+		} else if (e.getActionCommand() == "등록" && lp.getTitle().equals("고객")) {
+			rp.createRegisterPanel(lp.getTitle());
+			rp.setVisible(true);
 		} else {
 			showList(e.getActionCommand());
 		}
@@ -103,16 +108,16 @@ public class SwMngMain extends JFrame implements ActionListener {
 	}
 
 	void showList(String e) {
-		
+
 		switch (e) {
 		case "공급회사 목록":
-			lp.CompanyListPanel(e);
+			lp.ListPanel(e);
 			break;
 		case "소프트웨어 목록":
-			lp.CompanyListPanel(e);
+			lp.ListPanel(e);
 			break;
 		case "고객목록":
-			lp.CompanyListPanel(e);
+			lp.ListPanel(e);
 			break;
 		}
 		contentPane.add(lp, BorderLayout.CENTER);

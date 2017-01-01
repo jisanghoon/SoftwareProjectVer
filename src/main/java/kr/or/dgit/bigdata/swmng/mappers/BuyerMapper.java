@@ -12,4 +12,7 @@ public interface BuyerMapper<T> {
 	T selectByNo(int idx);
 
 	List<T> selectAll();
+
+	T selectMaxNo();
+
 }

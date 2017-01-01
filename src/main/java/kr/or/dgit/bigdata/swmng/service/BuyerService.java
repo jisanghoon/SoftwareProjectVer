@@ -6,7 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
+import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.mappers.BuyerMapper;
+import kr.or.dgit.bigdata.swmng.mappers.CompanyMapper;
 import kr.or.dgit.bigdata.swmng.util.MybatisSessionFactory;
 
 public class BuyerService implements BuyerMapper<Buyer> {
@@ -18,13 +20,7 @@ public class BuyerService implements BuyerMapper<Buyer> {
 	private static final BuyerService instance = new BuyerService();
 
 	public static BuyerService getInstance() {
-		if (logger.isDebugEnabled()) {
-			logger.debug("getInstance() - start");
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("getInstance() - end");
-		}
+	
 		return instance;
 	}
 
@@ -130,5 +126,25 @@ public class BuyerService implements BuyerMapper<Buyer> {
 			sqlSession.close();
 		}
 	}
+
+	@Override
+	public Buyer selectMaxNo() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectMaxNo() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		BuyerMapper companyDao = sqlSession.getMapper(BuyerMapper.class);
+		try {
+			Buyer returnList = (Buyer) companyDao.selectMaxNo();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectMaxNo() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+
 
 }

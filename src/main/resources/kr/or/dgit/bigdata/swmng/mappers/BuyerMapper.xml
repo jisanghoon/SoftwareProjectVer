@@ -10,11 +10,15 @@
 	<select id="selectByNo" parameterType="int" resultType="Buyer">
 		SELECT no,shopName,address,tel FROM buyer WHERE no = #{no}
 	</select>
+	<select id="selectMaxNo" parameterType="int" resultType="Buyer">
+		SELECT
+		MAX(no)+1 no FROM buyer
+	</select>
 	<delete id="deleteItem" parameterType="int">
 		DELETE FROM buyer WHERE no = #{no}
 	</delete>
 	<insert id="insertItem" parameterType="Buyer">
-		INSERT INTO buyer VALUES(#{shopName},#{address},#{tel})
+		INSERT INTO buyer VALUES(#{no},#{shopName},#{address},#{tel})
 	</insert>
 	<update id="updateItem" parameterType="Buyer">
 		UPDATE buyer SET shopName=#{shopName}, address= #{address}, tel= #{tel} WHERE no = #{no}

@@ -1,7 +1,5 @@
 package kr.or.dgit.bigdata.swmng.dto;
 
-import java.text.DecimalFormat;
-
 public class Company {
 	private int no;
 	private String coName;
@@ -18,15 +16,11 @@ public class Company {
 		return String.format("순번:%s, 회사명:%s, 주소:%s, 연락처:%s", no, coName, address, tel);
 	}
 
-	public Company(int no, String coName, String address, String tel) {
-		this.no = no;
-		this.coName = coName;
-		this.address = address;
-		this.tel = tel;
-	}
 
-	public Company(String coName, String address, String tel) {
+
+	public Company(int no,String coName, String address, String tel) {
 		super();
+		this.no = no;
 		this.coName = coName;
 		this.address = address;
 		this.tel = tel;

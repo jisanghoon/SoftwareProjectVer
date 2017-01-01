@@ -21,7 +21,7 @@
 		MAX(no)+1 no FROM company
 	</select>
 	<select id="selectCoName"  resultType="Company">
-		SELECT coname FROM company
+		SELECT DISTINCT coname FROM company
 	</select>
 	<select id="selectByNo" parameterType="int" resultType="Company">
 		SELECT
@@ -35,8 +35,8 @@
 		#{no}
 	</delete>
 	<insert id="insertItem" parameterType="Company">
-		INSERT INTO company(coname,address,tel)
-		VALUES(#{coName},#{address},#{tel})
+		INSERT INTO company(no,coname,address,tel)
+		VALUES(#{no},#{coName},#{address},#{tel})
 	</insert>
 	<update id="updateItem" parameterType="Company">
 		UPDATE company SET

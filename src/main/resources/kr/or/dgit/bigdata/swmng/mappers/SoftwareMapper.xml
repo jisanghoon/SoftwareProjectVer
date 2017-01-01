@@ -45,11 +45,15 @@
 	</insert>
 
 
-	<delete id="deleteItem" parameterType="int"> 
-	DELETE FROM software WHERE no = #{no}
+	<delete id="deleteItem" parameterType="int">
+		DELETE FROM software WHERE
+		no = #{no}
 	</delete>
 
-	<!-- <update id="updateItem" parameterType="int"> UPDATE software SET category=#{category}, 
-		title= #{title}, supPrice= #{supPrice}, sellPrice= #{sellPrice}, coName= 
-		#{coName} WHERE no = #{no} </update> -->
+	<update id="updateItem" parameterType="Company"> UPDATE software SET
+		no=#{no}, category=#{category}, title= #{title}, supPrice=
+		#{supPrice},
+		sellPrice= #{sellPrice}, coName= #{coName2} WHERE no =
+		#{no}
+	</update>
 </mapper>

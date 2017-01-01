@@ -6,6 +6,7 @@ public class Company {
 	private String address;
 	private String tel;
 
+
 	public Company(String coName) {
 		super();
 		this.coName = coName;

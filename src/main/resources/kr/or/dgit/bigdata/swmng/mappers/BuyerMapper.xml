@@ -3,25 +3,39 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- DAO인터페이스 연결 -->
 <mapper namespace="kr.or.dgit.bigdata.swmng.mappers.BuyerMapper">
+
+	<resultMap type="Buyer" id="buyerResult">
+		<id property="no" column="no" />
+		<result property="shopName" column="shopName" />
+		<result property="address" column="address" />
+		<result property="tel" column="tel" />
+	</resultMap>
+	
 	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
 	<select id="selectAll" resultType="Buyer">
-		SELECT no,shopName,address,tel FROM buyer order by no;
+		SELECT no,shopName,address,tel
+		FROM buyer order by no;
 	</select>
 	<select id="selectByNo" parameterType="int" resultType="Buyer">
-		SELECT no,shopName,address,tel FROM buyer WHERE no = #{no}
+		SELECT
+		no,shopName,address,tel FROM buyer WHERE no = #{no}
 	</select>
 	<select id="selectMaxNo" parameterType="int" resultType="Buyer">
 		SELECT
 		MAX(no)+1 no FROM buyer
 	</select>
 	<delete id="deleteItem" parameterType="int">
-		DELETE FROM buyer WHERE no = #{no}
+		DELETE FROM buyer WHERE no
+		= #{no}
 	</delete>
 	<insert id="insertItem" parameterType="Buyer">
-		INSERT INTO buyer VALUES(#{no},#{shopName},#{address},#{tel})
+		INSERT INTO buyer
+		VALUES(#{no},#{shopName},#{address},#{tel})
 	</insert>
 	<update id="updateItem" parameterType="Buyer">
-		UPDATE buyer SET shopName=#{shopName}, address= #{address}, tel= #{tel} WHERE no = #{no}
+		UPDATE buyer SET no=#{no},
+		shopName=#{shopName}, address= #{address}, tel= #{tel} WHERE no =
+		#{no}
 	</update>
 
 </mapper>

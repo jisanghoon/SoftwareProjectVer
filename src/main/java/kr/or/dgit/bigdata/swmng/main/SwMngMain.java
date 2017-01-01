@@ -91,6 +91,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		contentPane.removeAll();
+	
 		if (e.getActionCommand() == "등록" && lp.getTitle().equals("공급회사")) {
 			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);

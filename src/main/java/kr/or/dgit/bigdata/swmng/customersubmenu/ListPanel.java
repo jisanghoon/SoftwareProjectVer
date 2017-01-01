@@ -101,7 +101,17 @@ public class ListPanel extends JPanel {
 		} else {
 			JOptionPane.showMessageDialog(null, "삭제 할 항목을 선택해 주세요");
 		}
-		
+	}
+
+	public void updateAction() {
+		RegisterPanel rp = new RegisterPanel();
+		rp.setBtnOk("수정");
+		if (companyList.getSelectedRowCount() == 1) {
+			rp.createUpdatePanel(title,
+					Integer.parseInt((companyList.getValueAt(companyList.getSelectedRow(), 0) + "")));
+		} else {
+			JOptionPane.showMessageDialog(null, "수정 할 항목을 선택해 주세요");
+		}
 
 	}
 

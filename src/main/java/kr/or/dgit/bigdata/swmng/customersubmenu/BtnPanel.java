@@ -16,7 +16,6 @@ public class BtnPanel extends JPanel implements ActionListener {
 	private JButton btnDel;
 	private JButton btnClose;
 
-
 	/**
 	 * Create the panel.
 	 */
@@ -45,7 +44,8 @@ public class BtnPanel extends JPanel implements ActionListener {
 			new ListPanel().deleteAction();
 		}
 		if (e.getSource() == btnEdit) {
-
+		
+			new ListPanel().updateAction();
 		}
 		if (e.getSource() == btnAdd) {
 			new SwMngMain().actionPerformed(e);

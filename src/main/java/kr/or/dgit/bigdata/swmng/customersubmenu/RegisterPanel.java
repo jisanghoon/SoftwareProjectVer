@@ -32,7 +32,13 @@ public class RegisterPanel extends JFrame implements ActionListener {
 	private JLabel lblTItle;
 	private JPanel confirmPanel;
 	private JButton btnOk;
+
+	public void setBtnOk(String btnOk) {
+		this.btnOk.setText(btnOk);
+	}
+
 	private JButton btnCancel;
+
 	JComboBox cmbCategory = new JComboBox();
 	JComboBox cmbCoName = new JComboBox();
 	int titleArray = 0;
@@ -121,17 +127,83 @@ public class RegisterPanel extends JFrame implements ActionListener {
 
 	}
 
+	public void createUpdatePanel(String title, int idx) {
+		int input1 = 0;
+		String input2 = null;
+		String input3 = null;
+		String input4 = null;
+		if (title.equals("공급회사")) {
+			lblTItle.setText("공급회사 수정");
+			titleArray = 0;
+			Company list = CompanyService.getInstance().selectByNo(idx);
+			input1 = list.getNo();
+			input2 = list.getCoName();
+			input3 = list.getAddress();
+			input4 = list.getTel();
+
+		} else if (title.equals("소프트웨어")) {
+			lblTItle.setText("소프트웨어 수정");
+			titleArray = 1;
+			Software list = SoftwareService.getInstance().selectByNo(idx);
+			input1 = list.getNo();
+			input2 = list.getTitle();
+			input3 = list.getSupPrice() + "";
+			input4 = list.getSellPrice() + "";
+
+			List<Software> softwareList = SoftwareService.getInstance().selectCategory();
+			List<Company> companyList = CompanyService.getInstance().selectCoName();
+			for (Software s : softwareList) {
+				cmbCategory.addItem(s.getCategory());
+			}
+			for (Company c : companyList) {
+				cmbCoName.addItem(c.getCoName());
+			}
+			panel.add(new JLabel("분 류 명"));
+			panel.add(cmbCategory);
+			panel.add(new JLabel("공급회사명"));
+			panel.add(cmbCoName);
+		} else {
+			lblTItle.setText("고객 수정");
+			titleArray = 2;
+			Buyer list = BuyerService.getInstance().selectByNo(idx);
+			input1 = list.getNo();
+			input2 = list.getShopName();
+			input3 = list.getAddress();
+			input4 = list.getTel();
+		}
+		for (int i = 0; i < regForm.length; i++) {
+			regForm[i] = new JLabel(col[titleArray][i]);
+			regTf[i] = new JTextField();
+			panel.add(regForm[i]);
+			panel.add(regTf[i]);
+		}
+		regTf[0].setText(input1 + "");
+		regTf[1].setText(input2);
+		regTf[2].setText(input3);
+		regTf[3].setText(input4);
+		regTf[0].setEditable(false);
+		setVisible(true);
+	}
+
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnOk) {
-			actionPerformedBtnOk(e);
+		if (e.getActionCommand().equals("확인")) {
+			addInfo();
+		} else if (e.getActionCommand().equals("수정")) {
+			updateInfo();
 		}
 		if (e.getSource() == btnCancel) {
 			setVisible(false);
 		}
 	}
 
-	protected void actionPerformedBtnOk(ActionEvent e) {
+	protected void addInfo() {
 		String msg = "등록이 완료되었습니다";
+		List<Company> list = CompanyService.getInstance().selectCoName();
+		
+		for(Company c : list){
+			c.getCoName();
+		}
+		System.out.println(list);
 		if (regTf[1].getText().trim().equals("") || regTf[2].getText().trim().equals("")
 				|| regTf[3].getText().trim().equals("")) {
 			msg = "값을 입력하세요";
@@ -144,11 +216,33 @@ public class RegisterPanel extends JFrame implements ActionListener {
 							cmbCategory.getSelectedItem() + "", regTf[1].getText().trim(),
 							Integer.parseInt(regTf[2].getText().trim()), Integer.parseInt(regTf[3].getText().trim()),
 							cmbCoName.getSelectedItem() + ""));
-		} else {
+		} else if (titleArray == 2) {
 			BuyerService.getInstance().insertItem(new Buyer(Integer.parseInt(regTf[0].getText().trim()),
 					regTf[1].getText().trim(), regTf[2].getText().trim(), regTf[3].getText().trim()));
 		}
-		JOptionPane.showMessageDialog(null, msg);
 
+		JOptionPane.showMessageDialog(null, msg);
+	}
+
+	protected void updateInfo() {
+		String msg = "수정이 완료되었습니다";
+		if (regTf[1].getText().trim().equals("") || regTf[2].getText().trim().equals("")
+				|| regTf[3].getText().trim().equals("")) {
+			msg = "값을 입력하세요";
+		} else if (titleArray == 0) {
+			CompanyService.getInstance().updateItem(new Company(Integer.parseInt(regTf[0].getText().trim()),
+					regTf[1].getText().trim(), regTf[2].getText().trim(), regTf[3].getText().trim()));
+		} else if (titleArray == 1) {
+			SoftwareService.getInstance()
+					.updateItem(new Software(Integer.parseInt(regTf[0].getText().trim()),
+							cmbCategory.getSelectedItem() + "", regTf[1].getText().trim(),
+							Integer.parseInt(regTf[2].getText().trim()), Integer.parseInt(regTf[3].getText().trim()),
+							cmbCoName.getSelectedItem() + ""));
+		} else {
+			BuyerService.getInstance().updateItem(new Buyer(Integer.parseInt(regTf[0].getText().trim()),
+					regTf[1].getText().trim(), regTf[2].getText().trim(), regTf[3].getText().trim()));
+		}
+		JOptionPane.showMessageDialog(null, msg);
+		btnOk.setText("확인");
 	}
 }

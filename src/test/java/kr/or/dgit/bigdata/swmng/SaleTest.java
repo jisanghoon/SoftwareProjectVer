@@ -24,7 +24,7 @@ public class SaleTest {
 		ss = null;
 	}
 
-/*	@Test
+	@Test
 	public void testSelectAll() {
 		List<Sale> list = ss.selectAll();
 		Assert.assertNotNull(list);
@@ -40,7 +40,7 @@ public class SaleTest {
 		for (int i = 0; i < list.size(); i++) {
 			System.out.println(list.get(i));
 		}
-	}*/
+	}
 
 	
 	  @Test public void testSelectAllGroupByConame() { 

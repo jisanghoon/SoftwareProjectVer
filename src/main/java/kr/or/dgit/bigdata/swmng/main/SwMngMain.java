@@ -15,13 +15,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import kr.or.dgit.bigdata.swmng.customersubmenu.BtnPanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.GraphPanelTest;
+import kr.or.dgit.bigdata.swmng.customersubmenu.GraphPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.ListPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.RegisterEditPanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.ReportPanle;
+import kr.or.dgit.bigdata.swmng.customersubmenu.ReportPanel_version2;
 
 public class SwMngMain extends JFrame implements ActionListener {
 
@@ -35,7 +36,8 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem salesReportOrderByDate;
 	private JMenuItem mnReportList;
 	private JMenuItem orderStatusGraph;
-	
+	ReportPanel_version2 reportPanel=new ReportPanel_version2();
+	GraphPanel graphFrame=new GraphPanel();
 	ListPanel lp = new ListPanel();
 	private JLabel lblMainTitle;
 	RegisterEditPanel rp = new RegisterEditPanel();
@@ -45,7 +47,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 			public void run() {
 				try {
 					SwMngMain frame = new SwMngMain();
-					//UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+					UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
 					SwingUtilities.updateComponentTreeUI(frame);
 					frame.setVisible(true);
 					frame.setTitle("소프트웨어 매니지먼트");
@@ -123,7 +125,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		contentPane.removeAll();
-
+		setBounds(700, 400, 500, 300);
 		if (e.getActionCommand() == "등록" && lp.getTitle().equals("공급회사")) {
 			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);
@@ -134,20 +136,24 @@ public class SwMngMain extends JFrame implements ActionListener {
 			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);
 		}else if(e.getActionCommand() == "판매현황 보고서"){
-			ReportPanle reportPanel=new ReportPanle();
 			contentPane.add(reportPanel, BorderLayout.CENTER);
-			setSize(800, 800);
+			setSize(900, 700);
 			setLocationRelativeTo(null);
-		}else if(e.getSource() == orderStatusGraph){
-			GraphPanelTest graphFrame=new GraphPanelTest();
+			
+		}else if(e.getActionCommand() == "주문현황"){
+			GraphPanel graphFrame=new GraphPanel();
+			contentPane.add(graphFrame, BorderLayout.CENTER);
+			graphFrame.setVisible(true);
+			setSize(600, 600);
+			setLocationRelativeTo(null);
 		}else {
 			showList(e.getActionCommand());
 		}
-		contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
-		revalidate();
-		System.out.println();
-		System.out.println();
 		
+		if (e.getActionCommand() != "판매현황 보고서"&&e.getActionCommand() != "주문현황") {
+			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);	
+		}
+		revalidate();
 	}
 
 	void showList(String e) {

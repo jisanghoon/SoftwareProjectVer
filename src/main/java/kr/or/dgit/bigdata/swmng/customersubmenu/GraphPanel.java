@@ -1,15 +1,18 @@
 package kr.or.dgit.bigdata.swmng.customersubmenu;
 
 import java.awt.BorderLayout;
-import java.awt.HeadlessException;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -22,46 +25,44 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 import kr.or.dgit.bigdata.swmng.service.SaleService;
 
-public class GraphPanelTest extends JFrame{
-    
-    
-    public GraphPanelTest() throws HeadlessException {
-    	
-    
-        setSize(600, 600);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        
-        JPanel pnGraph = new JPanel();
-		add(pnGraph);
+public class GraphPanel extends JPanel {
+	
+	/**
+	 * Create the panel.
+	 */
+	public GraphPanel() {
+	
+		setLayout(new BorderLayout(0, 0));
+		JFXPanel fxPanel = new JFXPanel();
+		add(fxPanel, BorderLayout.CENTER);
 
-        JFXPanel fxPanel = new JFXPanel();
-        pnGraph.add(fxPanel,BorderLayout.CENTER);
-        
-        
 		JPanel pnBtn = new JPanel();
-		JButton btn =new JButton("확인");
+		pnBtn.setBackground(java.awt.Color.WHITE);
+		add(pnBtn, BorderLayout.SOUTH);
+
+		JButton btn = new JButton(" 확인 ");
+		pnBtn.add(btn);
 		btn.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
+				JLabel lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
+				lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
+				lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
 				
+				JPanel contentPane= (JPanel) GraphPanel.this.getParent();
+				contentPane.add(lblMainTitle,BorderLayout.CENTER);
+				JFrame mainframe= (JFrame) contentPane.getParent().getParent().getParent();
+				mainframe.setBounds(700, 400, 500, 300);
 			}
 		});
-		pnBtn.add(btn);
-		
-		
-		add(pnBtn,BorderLayout.SOUTH);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                initFX(fxPanel);
-            }
-       });
+		 Platform.runLater(new Runnable() {
+	            @Override
+	            public void run() {
+	                initFX(fxPanel);
+	            }
+	       });
 	}
-
-
 	private static void initFX(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
     	 Group  root  =  new  Group();
@@ -70,11 +71,14 @@ public class GraphPanelTest extends JFrame{
     	 NumberAxis yAxis = new NumberAxis();
          CategoryAxis xAxis = new CategoryAxis();
          BarChart<String, Number> bc = new BarChart<String, Number>(xAxis, yAxis);
-         
          bc.setTitle("주문현황");
          yAxis.setLabel("주문수량");
+         xAxis.setLabel("상호명");
+         
         XYChart.Series series1 = new XYChart.Series();
-        
+        bc.setLegendVisible(false);
+       // xAxis.setTickMarkVisible(true);
+        xAxis.setTickLabelRotation(360);
         
         List<Map<String, Object>> listmap = SaleService.getInstance().selectAllGroupByConame();
  		
@@ -88,8 +92,4 @@ public class GraphPanelTest extends JFrame{
     
          fxPanel.setScene(scene);
          }
-   
 }
-
-
-    

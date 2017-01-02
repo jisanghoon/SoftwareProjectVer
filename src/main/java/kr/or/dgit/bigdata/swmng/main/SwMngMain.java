@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -13,13 +14,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
+import javafx.scene.image.Image;
 import kr.or.dgit.bigdata.swmng.customersubmenu.BtnPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.ListPanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.RegisterPanel;
+import kr.or.dgit.bigdata.swmng.customersubmenu.RegisterEditPanel;
 
 public class SwMngMain extends JFrame implements ActionListener {
 
@@ -27,16 +29,24 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem listCompany;
 	private JMenuItem listSoftware;
 	private JMenuItem listCustomer;
+	private JMenuItem softwareOrder;
+	private JMenuItem salesReportOrderByBuyer;
+	private JMenuItem salesReportOrderBySW;
+	private JMenuItem salesReportOrderByDate;
+
 	ListPanel lp = new ListPanel();
 	private JLabel lblMainTitle;
-	RegisterPanel rp = new RegisterPanel();
+	RegisterEditPanel rp = new RegisterEditPanel();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					SwMngMain frame = new SwMngMain();
+					UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+					SwingUtilities.updateComponentTreeUI(frame);
 					frame.setVisible(true);
+					frame.setTitle("소프트웨어 매니지먼트");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -46,14 +56,14 @@ public class SwMngMain extends JFrame implements ActionListener {
 
 	public SwMngMain() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(700, 400, 556, 300);
+		setBounds(700, 400, 500, 300);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		// 고객관리 메뉴
 		JMenu mnCustomer = new JMenu("고객관리");
 		menuBar.add(mnCustomer);
-		// 고갠관리 하위 메뉴
+		// 고객관리 하위 메뉴
 		listCompany = new JMenuItem("공급회사 목록");
 		mnCustomer.add(listCompany);
 		listSoftware = new JMenuItem("소프트웨어 목록");
@@ -67,10 +77,20 @@ public class SwMngMain extends JFrame implements ActionListener {
 		// 주문관리 메뉴
 		JMenu mnOrder = new JMenu("주문관리");
 		menuBar.add(mnOrder);
+		// 주문관리 하위 메뉴
+		softwareOrder = new JMenuItem("소프트웨어 주문");
+		mnOrder.add(softwareOrder);
 
 		// 현황관리 메뉴
 		JMenu mnStatement = new JMenu("현황관리");
 		menuBar.add(mnStatement);
+		// 현황관리 하위 메뉴
+		salesReportOrderByBuyer = new JMenuItem("고객별 판매현황");
+		salesReportOrderBySW = new JMenuItem("SW별 판매현황");
+		salesReportOrderByDate = new JMenuItem("날짜별 판매현황");
+		mnStatement.add(salesReportOrderByBuyer);
+		mnStatement.add(salesReportOrderBySW);
+		mnStatement.add(salesReportOrderByDate);
 
 		// 보고서 메뉴
 		JMenu mnReport = new JMenu("보고서");
@@ -81,7 +101,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		lblMainTitle = new JLabel("소프트웨어 판매관리 프로그램");
+		lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblMainTitle, BorderLayout.CENTER);
@@ -91,7 +111,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		contentPane.removeAll();
-	
+
 		if (e.getActionCommand() == "등록" && lp.getTitle().equals("공급회사")) {
 			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);
@@ -112,13 +132,13 @@ public class SwMngMain extends JFrame implements ActionListener {
 
 		switch (e) {
 		case "공급회사 목록":
-			lp.ListPanel(e);
+			lp.createList(e);
 			break;
 		case "소프트웨어 목록":
-			lp.ListPanel(e);
+			lp.createList(e);
 			break;
 		case "고객목록":
-			lp.ListPanel(e);
+			lp.createList(e);
 			break;
 		}
 		contentPane.add(lp, BorderLayout.CENTER);

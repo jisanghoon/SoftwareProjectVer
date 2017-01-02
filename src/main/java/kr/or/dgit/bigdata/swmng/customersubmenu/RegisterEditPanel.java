@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
@@ -24,7 +26,7 @@ import kr.or.dgit.bigdata.swmng.service.BuyerService;
 import kr.or.dgit.bigdata.swmng.service.CompanyService;
 import kr.or.dgit.bigdata.swmng.service.SoftwareService;
 
-public class RegisterPanel extends JFrame implements ActionListener {
+public class RegisterEditPanel extends JFrame implements ActionListener {
 	private JLabel[] regForm = new JLabel[4];
 	private JTextField[] regTf = new JTextField[4];
 	private JPanel contentPane;
@@ -49,7 +51,9 @@ public class RegisterPanel extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegisterPanel frame = new RegisterPanel();
+
+					RegisterEditPanel frame = new RegisterEditPanel();
+
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,7 +62,7 @@ public class RegisterPanel extends JFrame implements ActionListener {
 		});
 	}
 
-	public RegisterPanel() {
+	public RegisterEditPanel() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(700, 400, 445, 168);
 		contentPane = new JPanel();
@@ -127,6 +131,7 @@ public class RegisterPanel extends JFrame implements ActionListener {
 
 	}
 
+	// 수정테이블
 	public void createUpdatePanel(String title, int idx) {
 		int input1 = 0;
 		String input2 = null;
@@ -158,6 +163,9 @@ public class RegisterPanel extends JFrame implements ActionListener {
 			for (Company c : companyList) {
 				cmbCoName.addItem(c.getCoName());
 			}
+			System.out.println(list.getCoName());
+			cmbCategory.setSelectedItem(list.getCategory());
+			cmbCoName.setSelectedItem(list.getCoName().getCoName());
 			panel.add(new JLabel("분 류 명"));
 			panel.add(cmbCategory);
 			panel.add(new JLabel("공급회사명"));
@@ -198,12 +206,6 @@ public class RegisterPanel extends JFrame implements ActionListener {
 
 	protected void addInfo() {
 		String msg = "등록이 완료되었습니다";
-		List<Company> list = CompanyService.getInstance().selectCoName();
-		
-		for(Company c : list){
-			c.getCoName();
-		}
-		System.out.println(list);
 		if (regTf[1].getText().trim().equals("") || regTf[2].getText().trim().equals("")
 				|| regTf[3].getText().trim().equals("")) {
 			msg = "값을 입력하세요";
@@ -243,6 +245,7 @@ public class RegisterPanel extends JFrame implements ActionListener {
 					regTf[1].getText().trim(), regTf[2].getText().trim(), regTf[3].getText().trim()));
 		}
 		JOptionPane.showMessageDialog(null, msg);
+		setVisible(false);
 		btnOk.setText("확인");
 	}
 }

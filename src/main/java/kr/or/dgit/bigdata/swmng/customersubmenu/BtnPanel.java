@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import kr.or.dgit.bigdata.swmng.main.SwMngMain;
 
@@ -20,6 +22,7 @@ public class BtnPanel extends JPanel implements ActionListener {
 	 * Create the panel.
 	 */
 	public BtnPanel() {
+		
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel btnPanel = new JPanel();

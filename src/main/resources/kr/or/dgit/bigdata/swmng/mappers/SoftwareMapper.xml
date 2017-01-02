@@ -21,9 +21,11 @@
 		s.no
 	</select>
 
-	<select id="selectByNo" parameterType="int" resultType="Software">
+	<select id="selectByNo" parameterType="int" resultType="Software"
+		resultMap="softwareResult">
 		SELECT
-		no,category,title,supPrice,sellPrice,coName FROM software WHERE no
+		s.no,s.category,s.title,s.supPrice,s.sellPrice,c.coName FROM software
+		s,company c WHERE c.coname = s.coname and s.no
 		=
 		#{no}
 	</select>

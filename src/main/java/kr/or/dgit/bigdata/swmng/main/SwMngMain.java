@@ -145,7 +145,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		}
 		contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
 		revalidate();
-		System.out.println("sdf");
+		
 	}
 
 	void showList(String e) {

@@ -1,5 +1,6 @@
 package kr.or.dgit.bigdata.swmng.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Sale {
@@ -12,8 +13,11 @@ public class Sale {
 
 	@Override
 	public String toString() {
-		return String.format("Sale [no=%s, shopName=%s, title=%s, orderCount=%s, payment=%s, date=%s]", no, shopName,
-				title, orderCount, payment, date);
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		return String.format("Sale [no=%s, shopName=%s, title=%s, orderCount=%s, payment=%s, date=%s]", no, shopName.getShopName(),
+				title.getTitle(), orderCount, payment, format.format(date));
 	}
 
 	public Sale(int no, Buyer shopName, Software title, int orderCount, boolean payment, Date date) {

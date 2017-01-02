@@ -15,13 +15,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import javafx.scene.image.Image;
 import kr.or.dgit.bigdata.swmng.customersubmenu.BtnPanel;
+import kr.or.dgit.bigdata.swmng.customersubmenu.GraphPanelTest;
 import kr.or.dgit.bigdata.swmng.customersubmenu.ListPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.RegisterEditPanel;
+import kr.or.dgit.bigdata.swmng.customersubmenu.ReportPanle;
 
 public class SwMngMain extends JFrame implements ActionListener {
 
@@ -33,7 +33,9 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem salesReportOrderByBuyer;
 	private JMenuItem salesReportOrderBySW;
 	private JMenuItem salesReportOrderByDate;
-
+	private JMenuItem mnReportList;
+	private JMenuItem orderStatusGraph;
+	
 	ListPanel lp = new ListPanel();
 	private JLabel lblMainTitle;
 	RegisterEditPanel rp = new RegisterEditPanel();
@@ -43,7 +45,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 			public void run() {
 				try {
 					SwMngMain frame = new SwMngMain();
-					UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+					//UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
 					SwingUtilities.updateComponentTreeUI(frame);
 					frame.setVisible(true);
 					frame.setTitle("소프트웨어 매니지먼트");
@@ -84,6 +86,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		// 현황관리 메뉴
 		JMenu mnStatement = new JMenu("현황관리");
 		menuBar.add(mnStatement);
+		
 		// 현황관리 하위 메뉴
 		salesReportOrderByBuyer = new JMenuItem("고객별 판매현황");
 		salesReportOrderBySW = new JMenuItem("SW별 판매현황");
@@ -95,6 +98,15 @@ public class SwMngMain extends JFrame implements ActionListener {
 		// 보고서 메뉴
 		JMenu mnReport = new JMenu("보고서");
 		menuBar.add(mnReport);
+
+		
+		mnReportList = new JMenuItem("판매현황 보고서");
+		mnReportList.addActionListener(this);
+		mnReport.add(mnReportList);
+
+		orderStatusGraph = new JMenuItem("주문현황");
+		orderStatusGraph.addActionListener(this);
+		mnReport.add(orderStatusGraph);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -121,7 +133,14 @@ public class SwMngMain extends JFrame implements ActionListener {
 		} else if (e.getActionCommand() == "등록" && lp.getTitle().equals("고객")) {
 			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);
-		} else {
+		}else if(e.getActionCommand() == "판매현황 보고서"){
+			ReportPanle reportPanel=new ReportPanle();
+			contentPane.add(reportPanel, BorderLayout.CENTER);
+			setSize(800, 800);
+			setLocationRelativeTo(null);
+		}else if(e.getSource() == orderStatusGraph){
+			GraphPanelTest graphFrame=new GraphPanelTest();
+		}else {
 			showList(e.getActionCommand());
 		}
 		contentPane.add(new BtnPanel(), BorderLayout.SOUTH);

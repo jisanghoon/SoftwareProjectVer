@@ -23,6 +23,7 @@ import kr.or.dgit.bigdata.swmng.customersubmenu.GraphPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.ListPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.RegisterEditPanel;
 import kr.or.dgit.bigdata.swmng.customersubmenu.ReportPanel_version2;
+import kr.or.dgit.bigdata.swmng.customersubmenu.SalesStatusPanel;
 
 public class SwMngMain extends JFrame implements ActionListener {
 
@@ -38,7 +39,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem orderStatusGraph;
 	ReportPanel_version2 reportPanel = new ReportPanel_version2();
 	GraphPanel graphFrame = new GraphPanel();
-	ListPanel lp = new ListPanel();
+	ListPanel lp;
 	private JLabel lblMainTitle;
 	RegisterEditPanel rp = new RegisterEditPanel();
 
@@ -91,6 +92,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 
 		// 현황관리 하위 메뉴
 		salesReportOrderByBuyer = new JMenuItem("고객별 판매현황");
+		salesReportOrderByBuyer.addActionListener(this);
 		salesReportOrderBySW = new JMenuItem("SW별 판매현황");
 		salesReportOrderByDate = new JMenuItem("날짜별 판매현황");
 		mnStatement.add(salesReportOrderByBuyer);
@@ -123,6 +125,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		contentPane.removeAll();
 		setBounds(700, 400, 500, 300);
 		if (e.getActionCommand() == "등록" && lp.getTitle().equals("공급회사")) {
@@ -138,18 +141,19 @@ public class SwMngMain extends JFrame implements ActionListener {
 			contentPane.add(reportPanel, BorderLayout.CENTER);
 			setSize(900, 700);
 			setLocationRelativeTo(null);
-
 		} else if (e.getActionCommand() == "주문현황") {
 			GraphPanel graphFrame = new GraphPanel();
 			contentPane.add(graphFrame, BorderLayout.CENTER);
 			graphFrame.setVisible(true);
 			setSize(600, 600);
 			setLocationRelativeTo(null);
-		} else {
+		}else if (e.getSource() == salesReportOrderByBuyer) {
+			SalesStatusPanel panel=new SalesStatusPanel();
+			contentPane.add(panel, BorderLayout.CENTER);
+		}else {
 			showList(e.getActionCommand());
 		}
-
-		if (e.getActionCommand() != "판매현황 보고서" && e.getActionCommand() != "주문현황") {
+		if (e.getActionCommand() != "판매현황 보고서" && e.getActionCommand() != "주문현황"&&e.getSource()!=salesReportOrderByBuyer) {
 			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
 		}
 		revalidate();
@@ -157,7 +161,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	}
 
 	void showList(String e) {
-
+		lp = new ListPanel();
 		switch (e) {
 		case "공급회사 목록":
 			lp.createList(e);
@@ -172,4 +176,5 @@ public class SwMngMain extends JFrame implements ActionListener {
 		contentPane.add(lp, BorderLayout.CENTER);
 	}
 
+	
 }

@@ -82,14 +82,13 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 			rdTradeDetailActionPerformed(e);
 		} else if (e.getSource() == rdTotalSale) {
 			rdTotalSaleActionPerformed(e);
-
 		}
 		scrollPane.setViewportView(table);
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		mft.resizeColumnWidth(table);
+		
 		revalidate();
 		repaint();
 	}
@@ -126,11 +125,12 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		data[idx][0] = new String("총 합 계");
 		data[idx][5] = String.format("%,d", total);
 
-		ModelForTable mft = new ModelForTable(data, COL_NAMES);
+		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
 		table.setPreferredScrollableViewportSize(new Dimension(600, 500)); // 테이블
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5);
+		mft.resizeColumnWidth(table);
 	}
 
 	protected void rdTradeDetailActionPerformed(ActionEvent e) {
@@ -175,6 +175,7 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		table.setPreferredScrollableViewportSize(new Dimension(750, 500)); // 테이블
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5, 6, 7, 8);
+		mft.resizeColumnWidth(table);
 
 	}
 

@@ -30,6 +30,7 @@ public class ListPanel extends JPanel {
 	String[][] data;
 	private static String title;
 	private JLabel listTitle = new JLabel();
+	private ModelForTable mft;
 
 	public static String getTitle() {
 		return title;
@@ -49,7 +50,7 @@ public class ListPanel extends JPanel {
 	}
 
 	public void createList(String e) {
-		
+
 		add(listTitle);
 		listTitle.setText(e);
 		if (e.equals("공급회사 목록")) {
@@ -65,13 +66,14 @@ public class ListPanel extends JPanel {
 				data[idx][3] = c.getTel();
 				idx++;
 			}
-			ModelForTable mft = new ModelForTable(data, COL_NAMES);
+			mft = new ModelForTable(data, COL_NAMES);
 			companyList.setModel(mft);
+			mft.tableCellAlignment(companyList, SwingConstants.CENTER, 0, 3);
 		} else if (e.equals("소프트웨어 목록")) {
 			title = "소프트웨어";
 			List<Software> list = SoftwareService.getInstance().selectAll();
 			String[] COL_NAMES = { "품목번호", "분류명", "품목명", "공급가격", "판매가격", "공급회사명" };
-			String[][] data = new String[list.size()][COL_NAMES.length];
+			data = new String[list.size()][COL_NAMES.length];
 			idx = 0;
 			for (Software s : list) {
 				data[idx][0] = s.getNo() + "";
@@ -82,13 +84,15 @@ public class ListPanel extends JPanel {
 				data[idx][5] = s.getCoName().getCoName();
 				idx++;
 			}
-			ModelForTable mft = new ModelForTable(data, COL_NAMES);
+			mft = new ModelForTable(data, COL_NAMES);
 			companyList.setModel(mft);
+			mft.tableCellAlignment(companyList, SwingConstants.CENTER, 0, 1,5);
+			mft.tableCellAlignment(companyList, SwingConstants.RIGHT, 3, 4);
 		} else {
 			title = "고객";
 			List<Buyer> list = BuyerService.getInstance().selectAll();
 			String[] COL_NAMES = { "등록번호", "상호", "주소", "전화번호" };
-			String[][] data = new String[list.size()][COL_NAMES.length];
+			data = new String[list.size()][COL_NAMES.length];
 			idx = 0;
 			for (Buyer b : list) {
 				data[idx][0] = b.getNo() + "";
@@ -97,14 +101,14 @@ public class ListPanel extends JPanel {
 				data[idx][3] = b.getTel();
 				idx++;
 			}
-			ModelForTable mft = new ModelForTable(data, COL_NAMES);
+			mft = new ModelForTable(data, COL_NAMES);
 			companyList.setModel(mft);
-		}
+			mft.tableCellAlignment(companyList, SwingConstants.CENTER, 0, 3);
 
+		}
 		companyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		JScrollPane jsp = new JScrollPane(companyList);
-		jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		add(jsp);
+		mft.resizeColumnWidth(companyList);
+		add(new JScrollPane(companyList));
 	}
 
 	public void deleteAction() {
@@ -144,19 +148,4 @@ public class ListPanel extends JPanel {
 		}
 
 	}
-
-	public void resizeList() {
-		companyList.getColumnModel().getColumn(0).setPreferredWidth(30);
-		companyList.getColumnModel().getColumn(1).setPreferredWidth(50);
-		companyList.getColumnModel().getColumn(2).setPreferredWidth(90);
-		companyList.getColumnModel().getColumn(3).setPreferredWidth(90);
-		DefaultTableCellHeaderRenderer dt = new DefaultTableCellHeaderRenderer();
-		dt.setHorizontalAlignment(SwingConstants.CENTER);
-		TableColumnModel tcm = companyList.getColumnModel();
-		for (int i = 0; i < tcm.getColumnCount(); i++) {
-			tcm.getColumn(i).setCellRenderer(dt);
-		}
-
-	}
-
 }

@@ -36,8 +36,8 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem salesReportOrderByDate;
 	private JMenuItem mnReportList;
 	private JMenuItem orderStatusGraph;
-	ReportPanel_version2 reportPanel=new ReportPanel_version2();
-	GraphPanel graphFrame=new GraphPanel();
+	ReportPanel_version2 reportPanel = new ReportPanel_version2();
+	GraphPanel graphFrame = new GraphPanel();
 	ListPanel lp = new ListPanel();
 	private JLabel lblMainTitle;
 	RegisterEditPanel rp = new RegisterEditPanel();
@@ -88,7 +88,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		// 현황관리 메뉴
 		JMenu mnStatement = new JMenu("현황관리");
 		menuBar.add(mnStatement);
-		
+
 		// 현황관리 하위 메뉴
 		salesReportOrderByBuyer = new JMenuItem("고객별 판매현황");
 		salesReportOrderBySW = new JMenuItem("SW별 판매현황");
@@ -101,7 +101,6 @@ public class SwMngMain extends JFrame implements ActionListener {
 		JMenu mnReport = new JMenu("보고서");
 		menuBar.add(mnReport);
 
-		
 		mnReportList = new JMenuItem("판매현황 보고서");
 		mnReportList.addActionListener(this);
 		mnReport.add(mnReportList);
@@ -135,25 +134,26 @@ public class SwMngMain extends JFrame implements ActionListener {
 		} else if (e.getActionCommand() == "등록" && lp.getTitle().equals("고객")) {
 			rp.createRegisterPanel(lp.getTitle());
 			rp.setVisible(true);
-		}else if(e.getActionCommand() == "판매현황 보고서"){
+		} else if (e.getActionCommand() == "판매현황 보고서") {
 			contentPane.add(reportPanel, BorderLayout.CENTER);
 			setSize(900, 700);
 			setLocationRelativeTo(null);
-			
-		}else if(e.getActionCommand() == "주문현황"){
-			GraphPanel graphFrame=new GraphPanel();
+
+		} else if (e.getActionCommand() == "주문현황") {
+			GraphPanel graphFrame = new GraphPanel();
 			contentPane.add(graphFrame, BorderLayout.CENTER);
 			graphFrame.setVisible(true);
 			setSize(600, 600);
 			setLocationRelativeTo(null);
-		}else {
+		} else {
 			showList(e.getActionCommand());
 		}
-		
-		if (e.getActionCommand() != "판매현황 보고서"&&e.getActionCommand() != "주문현황") {
-			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);	
+
+		if (e.getActionCommand() != "판매현황 보고서" && e.getActionCommand() != "주문현황") {
+			contentPane.add(new BtnPanel(), BorderLayout.SOUTH);
 		}
 		revalidate();
+
 	}
 
 	void showList(String e) {

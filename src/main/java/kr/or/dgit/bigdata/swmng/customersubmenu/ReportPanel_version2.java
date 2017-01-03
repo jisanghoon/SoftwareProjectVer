@@ -35,6 +35,7 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 	private JPanel panelForTable;
 	private JTable table;
 	private JScrollPane scrollPane;
+	private ModelForTable mft;
 
 	public ReportPanel_version2() {
 		setBackground(Color.WHITE);
@@ -81,20 +82,17 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 			rdTradeDetailActionPerformed(e);
 		} else if (e.getSource() == rdTotalSale) {
 			rdTotalSaleActionPerformed(e);
-			
-		}
 
+		}
 		scrollPane.setViewportView(table);
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		resizeColumnWidth(table);
+		mft.resizeColumnWidth(table);
 		revalidate();
 		repaint();
 	}
-
-
 
 	protected void rdTotalSaleActionPerformed(ActionEvent e) {
 		List<Sale> reportlist = SaleService.getInstance().selectAllSortDate();
@@ -103,19 +101,19 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		String[][] data = new String[reportlist.size() + 2][6];
 		int idx = 0;
 		int total = 0;
-		String beforeDate="";
+		String beforeDate = "";
 		SimpleDateFormat format = new SimpleDateFormat("yyyy년MM월dd");
 		for (Sale c : reportlist) {
 
-			String date=format.format(c.getDate());
+			String date = format.format(c.getDate());
 			if (beforeDate.equals(date)) {
-				data[idx][0]="\"";
-			}else {
+				data[idx][0] = "\"";
+			} else {
 				data[idx][0] = date;
-				beforeDate=date;
+				beforeDate = date;
 			}
-			
-			//data[idx][0] = format.format(c.getDate());
+
+			// data[idx][0] = format.format(c.getDate());
 			data[idx][1] = c.getTitle().getCategory();
 			data[idx][2] = c.getTitle().getTitle();
 			data[idx][3] = c.getNo() + "";
@@ -131,8 +129,8 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		ModelForTable mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
 		table.setPreferredScrollableViewportSize(new Dimension(600, 500)); // 테이블
-		tableCellAlignment(SwingConstants.CENTER, 0, 1, 2, 3, 4);
-		tableCellAlignment(SwingConstants.RIGHT, 5);
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
+		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5);
 	}
 
 	protected void rdTradeDetailActionPerformed(ActionEvent e) {
@@ -142,21 +140,21 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		int idx = 0;
 		int total = 0;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String beforeConame="";
+		String beforeConame = "";
 		for (Sale c : reportlist) {
 			int orderCnt = c.getOrderCount();
 			int supPrice = c.getTitle().getSupPrice();
 			int cost = orderCnt * supPrice;
 			int tax = (int) (cost * 0.1);
-			
-			String coname=c.getTitle().getCoName().getCoName();
+
+			String coname = c.getTitle().getCoName().getCoName();
 			if (beforeConame.equals(coname)) {
-				data[idx][0]="\"";
-			}else {
+				data[idx][0] = "\"";
+			} else {
 				data[idx][0] = coname;
-				beforeConame=coname;
+				beforeConame = coname;
 			}
-			
+
 			data[idx][1] = format.format(c.getDate());
 			data[idx][2] = c.getShopName().getShopName();
 			data[idx][3] = c.getTitle().getTitle();
@@ -175,32 +173,9 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		ModelForTable mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
 		table.setPreferredScrollableViewportSize(new Dimension(750, 500)); // 테이블
-		tableCellAlignment(SwingConstants.CENTER, 0, 1, 2, 3, 4);
-		tableCellAlignment(SwingConstants.RIGHT, 5, 6, 7, 8);
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
+		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5, 6, 7, 8);
 
-	}
-
-	public void resizeColumnWidth(JTable table) {
-		final TableColumnModel columnModel = table.getColumnModel();
-		for (int column = 0; column < table.getColumnCount(); column++) {
-			int width = 50; // Min width
-			for (int row = 0; row < table.getRowCount(); row++) {
-				TableCellRenderer renderer = table.getCellRenderer(row, column);
-				Component comp = table.prepareRenderer(renderer, row, column);
-				width = Math.max(comp.getPreferredSize().width + 1, width);
-			}
-			columnModel.getColumn(column).setPreferredWidth(width);
-		}
-	}
-
-	protected void tableCellAlignment(int align, int... idx) {
-		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
-		dtcr.setHorizontalAlignment(align);
-
-		TableColumnModel model = table.getColumnModel();
-		for (int i = 0; i < idx.length; i++) {
-			model.getColumn(idx[i]).setCellRenderer(dtcr);
-		}
 	}
 
 }

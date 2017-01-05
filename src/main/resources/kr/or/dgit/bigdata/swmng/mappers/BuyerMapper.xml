@@ -20,6 +20,10 @@
 		SELECT
 		no,shopName,address,tel FROM buyer WHERE no = #{no}
 	</select>
+		<select id="selectShopName" resultType="Buyer">
+		SELECT DISTINCT shopname FROM
+		buyer
+	</select>
 	<select id="selectMaxNo" parameterType="int" resultType="Buyer">
 		SELECT
 		MAX(no)+1 no FROM buyer

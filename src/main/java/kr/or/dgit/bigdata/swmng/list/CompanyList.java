@@ -22,9 +22,8 @@ import kr.or.dgit.bigdata.swmng.customer.CompanyRegEdit;
 import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.service.CompanyService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
-import kr.or.dgit.bigdata.swmng.util.ReloadUpdateInterface;
 
-public class CompanyList extends JPanel implements ActionListener, DeleteInterface, ReloadUpdateInterface {
+public class CompanyList extends JPanel implements ActionListener, ListInterface {
 	private JButton btnAdd;
 	private JButton btnUpdate;
 	private JButton btnDel;
@@ -141,8 +140,4 @@ public class CompanyList extends JPanel implements ActionListener, DeleteInterfa
 		repaint();
 	}
 
-	@Override
-	public void updateAction(int no) {
-		
-	}
 }

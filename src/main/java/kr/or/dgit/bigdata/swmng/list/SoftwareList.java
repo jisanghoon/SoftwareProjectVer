@@ -22,9 +22,8 @@ import kr.or.dgit.bigdata.swmng.customer.SoftwareRegEdit;
 import kr.or.dgit.bigdata.swmng.dto.Software;
 import kr.or.dgit.bigdata.swmng.service.SoftwareService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
-import kr.or.dgit.bigdata.swmng.util.ReloadUpdateInterface;
 
-public class SoftwareList extends JPanel implements ActionListener, DeleteInterface, ReloadUpdateInterface {
+public class SoftwareList extends JPanel implements ActionListener, ListInterface {
 	private JButton btnAdd;
 	private JButton btnUpdate;
 	private JButton btnDel;
@@ -97,11 +96,7 @@ public class SoftwareList extends JPanel implements ActionListener, DeleteInterf
 
 	}
 
-	@Override
-	public void updateAction(int no) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	@Override
 	public void refresh(JPanel p) {

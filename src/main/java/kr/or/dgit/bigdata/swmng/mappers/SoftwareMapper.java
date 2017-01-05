@@ -16,5 +16,6 @@ public interface SoftwareMapper<T> {
 	T selectMaxNo();
 
 	List<T> selectCategory();
-
+	
+	List<T> selectTitle();
 }

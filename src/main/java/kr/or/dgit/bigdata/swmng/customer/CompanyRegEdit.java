@@ -20,15 +20,15 @@ import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.list.CompanyList;
 import kr.or.dgit.bigdata.swmng.main.SwMngMain;
 import kr.or.dgit.bigdata.swmng.service.CompanyService;
-import kr.or.dgit.bigdata.swmng.util.ReloadUpdateInterface;
 
-public class CompanyRegEdit extends JPanel implements ActionListener, ReloadUpdateInterface {
+public class CompanyRegEdit extends JPanel implements ActionListener, RegEditInterface {
 	private JTextField tfAddress;
 	private JTextField tfNo;
 	private JTextField tfCoName;
 	private JTextField tfTel;
 	private JButton btnAdd;
 	private JButton btnCancel;
+	private String selectedCoName;
 
 	public CompanyRegEdit(String e, int flag) {
 		setLayout(new BorderLayout(0, 0));
@@ -156,6 +156,7 @@ public class CompanyRegEdit extends JPanel implements ActionListener, ReloadUpda
 		}
 
 	}
+
 	@Override
 	public void updateAction(int no) {
 
@@ -165,6 +166,7 @@ public class CompanyRegEdit extends JPanel implements ActionListener, ReloadUpda
 		tfCoName.setText(list.getCoName());
 		tfAddress.setText(list.getAddress());
 		tfTel.setText(list.getTel());
+		selectedCoName = list.getCoName();
 		revalidate();
 		repaint();
 	}
@@ -173,17 +175,23 @@ public class CompanyRegEdit extends JPanel implements ActionListener, ReloadUpda
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "등록":
-			CompanyService.getInstance().insertItem(new Company(Integer.parseInt(tfNo.getText()),
-					tfCoName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
-			JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
-			refresh(new CompanyList());
+			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
+				CompanyService.getInstance().insertItem(new Company(Integer.parseInt(tfNo.getText()),
+						tfCoName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
+				JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
+				refresh(new CompanyList());
+			}
+
 			break;
 		case "수정":
-			btnAdd.setText("등록");
-			CompanyService.getInstance().updateItem(new Company(Integer.parseInt(tfNo.getText()),
-					tfCoName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
-			JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
-			refresh(new CompanyList());
+			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
+				btnAdd.setText("등록");
+				CompanyService.getInstance().updateItem(new Company(Integer.parseInt(tfNo.getText()),
+						tfCoName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
+				JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
+				refresh(new CompanyList());
+			}
+
 			break;
 
 		case "취소":
@@ -201,4 +209,55 @@ public class CompanyRegEdit extends JPanel implements ActionListener, ReloadUpda
 		repaint();
 	}
 
+	@Override
+	public boolean inputValidation() {
+		if (tfNo.getText().equals("") || tfCoName.getText().trim().equals("") || tfAddress.getText().trim().equals("")
+				|| tfTel.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "빈칸없이 입력해 주세요");
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	@Override
+	public boolean duplicateValidation(String e) {
+		List<Company> list = CompanyService.getInstance().selectCoName();
+		boolean flag = true;
+
+		switch (e) {
+
+		case "등록":
+			for (Company c : list) {
+				if (tfCoName.getText().trim().equals(c.getCoName())) {
+					flag = false;
+					tfCoName.requestFocus();
+					tfCoName.selectAll();
+					JOptionPane.showMessageDialog(null, "입력하신 회사이름이 중복되었습니다");
+				}
+			}
+			break;
+
+		case "수정":
+			String[] coNames = new String[list.size()];
+			int idx = 0;
+			for (Company c : list) {
+				if (c.getCoName().equals(selectedCoName) == false) {
+					coNames[idx] = c.getCoName();
+					idx++;
+				}
+			}
+			for (int i = 0; i < list.size() - 1; i++) {
+				if (coNames[i].equals(tfCoName.getText().trim())) {
+					flag = false;
+					tfCoName.requestFocus();
+					tfCoName.selectAll();
+					JOptionPane.showMessageDialog(null, "다른 회사이름과 중복되었습니다");
+				}
+			}
+			break;
+		}
+		return flag;
+	}
 }

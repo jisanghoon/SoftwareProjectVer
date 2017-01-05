@@ -145,6 +145,24 @@ public class BuyerService implements BuyerMapper<Buyer> {
 		}
 	}
 
+	@Override
+	public List<Buyer> selectShopName() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectShopName() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		BuyerMapper buyerDao = sqlSession.getMapper(BuyerMapper.class);
+		try {
+			List<Buyer> returnList = buyerDao.selectShopName();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectShopName() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
 
 
 }

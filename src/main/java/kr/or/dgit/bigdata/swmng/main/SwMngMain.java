@@ -18,9 +18,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import kr.or.dgit.bigdata.swmng.customersubmenu.GraphPanel;
-import kr.or.dgit.bigdata.swmng.customersubmenu.ReportPanel_version2;
-import kr.or.dgit.bigdata.swmng.customersubmenu.SalesStatusPanel;
+import kr.or.dgit.bigdata.swmng.customer.submenu.GraphPanel;
+import kr.or.dgit.bigdata.swmng.customer.submenu.ReportPanel_version2;
+import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel;
 import kr.or.dgit.bigdata.swmng.list.BuyerList;
 import kr.or.dgit.bigdata.swmng.list.CompanyList;
 import kr.or.dgit.bigdata.swmng.list.SoftwareList;
@@ -37,8 +37,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem salesReportOrderByDate;
 	private JMenuItem mnReportList;
 	private JMenuItem orderStatusGraph;
-	ReportPanel_version2 reportPanel = new ReportPanel_version2();
-	GraphPanel graphFrame = new GraphPanel();
+	
 	CompanyList cl;
 	private JLabel lblMainTitle;
 
@@ -124,7 +123,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		contentPane.removeAll();
-		setBounds(700, 400, 500, 300);
+		setSize(500, 300);
 
 		switch (e.getActionCommand()) {
 		case "공급회사 목록":
@@ -137,14 +136,12 @@ public class SwMngMain extends JFrame implements ActionListener {
 			contentPane.add(new BuyerList(), BorderLayout.CENTER);
 			break;
 		case "판매현황 보고서":
-			contentPane.add(reportPanel, BorderLayout.CENTER);
+			contentPane.add(new ReportPanel_version2(), BorderLayout.CENTER);
 			setSize(900, 700);
 			setLocationRelativeTo(null);
 			break;
 		case "주문현황":
-			GraphPanel graphFrame = new GraphPanel();
-			contentPane.add(graphFrame, BorderLayout.CENTER);
-			graphFrame.setVisible(true);
+			contentPane.add(new GraphPanel(), BorderLayout.CENTER);
 			setSize(600, 600);
 			setLocationRelativeTo(null);
 			break;

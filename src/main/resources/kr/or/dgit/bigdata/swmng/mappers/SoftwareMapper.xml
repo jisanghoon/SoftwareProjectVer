@@ -21,6 +21,10 @@
 		s.no
 	</select>
 
+	<select id="selectTitle" resultType="Software">
+		SELECT DISTINCT title FROM
+		software
+	</select>
 	<select id="selectByNo" parameterType="int" resultType="Software"
 		resultMap="softwareResult">
 		SELECT

@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,17 +17,19 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
+import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.list.BuyerList;
 import kr.or.dgit.bigdata.swmng.service.BuyerService;
-import kr.or.dgit.bigdata.swmng.util.ReloadUpdateInterface;
+import kr.or.dgit.bigdata.swmng.service.CompanyService;
 
-public class BuyerRegEdit extends JPanel implements ActionListener, ReloadUpdateInterface {
+public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInterface {
 	private JTextField tfAddress;
 	private JTextField tfNo;
 	private JTextField tfShopName;
 	private JTextField tfTel;
 	private JButton btnAdd;
 	private JButton btnCancel;
+	private String selectedShopName;
 
 	public BuyerRegEdit(String e, int flag) {
 		setLayout(new BorderLayout(0, 0));
@@ -169,17 +172,22 @@ public class BuyerRegEdit extends JPanel implements ActionListener, ReloadUpdate
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "등록":
-			BuyerService.getInstance().insertItem(new Buyer(Integer.parseInt(tfNo.getText()),
-					tfShopName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
-			JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
-			refresh(new BuyerList());
+			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
+				BuyerService.getInstance().insertItem(new Buyer(Integer.parseInt(tfNo.getText()),
+						tfShopName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
+				JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
+				refresh(new BuyerList());
+			}
+
 			break;
 		case "수정":
-			btnAdd.setText("등록");
-			BuyerService.getInstance().updateItem(new Buyer(Integer.parseInt(tfNo.getText()),
-					tfShopName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
-			JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
-			refresh(new BuyerList());
+			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
+				btnAdd.setText("등록");
+				BuyerService.getInstance().updateItem(new Buyer(Integer.parseInt(tfNo.getText()),
+						tfShopName.getText().trim(), tfAddress.getText().trim(), tfTel.getText().trim()));
+				JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
+				refresh(new BuyerList());
+			}
 			break;
 
 		case "취소":
@@ -197,8 +205,60 @@ public class BuyerRegEdit extends JPanel implements ActionListener, ReloadUpdate
 		tfShopName.setText(list.getShopName());
 		tfAddress.setText(list.getAddress());
 		tfTel.setText(list.getTel());
+		selectedShopName = list.getShopName();
 		revalidate();
 		repaint();
+	}
+
+	@Override
+	public boolean inputValidation() {
+		if (tfNo.getText().equals("") || tfShopName.getText().trim().equals("") || tfAddress.getText().trim().equals("")
+				|| tfTel.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "빈칸없이 입력해 주세요");
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean duplicateValidation(String e) {
+		List<Buyer> list = BuyerService.getInstance().selectShopName();
+		boolean flag = true;
+
+		switch (e) {
+
+		case "등록":
+			for (Buyer b : list) {
+				if (tfShopName.getText().trim().equals(b.getShopName())) {
+					flag = false;
+					tfShopName.requestFocus();
+					tfShopName.selectAll();
+					JOptionPane.showMessageDialog(null, "입력하신 상호명이 중복되었습니다");
+				}
+			}
+			break;
+
+		case "수정":
+			String[] shopName = new String[list.size()];
+			int idx = 0;
+			for (Buyer b : list) {
+				if (b.getShopName().equals(selectedShopName) == false) {
+					shopName[idx] = b.getShopName();
+					idx++;
+				}
+			}
+			for (int i = 0; i < list.size() - 1; i++) {
+				if (shopName[i].equals(tfShopName.getText().trim())) {
+					flag = false;
+					tfShopName.requestFocus();
+					tfShopName.selectAll();
+					JOptionPane.showMessageDialog(null, "다른 상호명과 중복되었습니다");
+				}
+			}
+			break;
+		}
+		return flag;
 	}
 
 }

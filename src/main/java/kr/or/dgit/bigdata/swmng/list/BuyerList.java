@@ -1,43 +1,29 @@
 package kr.or.dgit.bigdata.swmng.list;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.border.EmptyBorder;
-
-import kr.or.dgit.bigdata.swmng.customer.BuyerRegEdit;
-import kr.or.dgit.bigdata.swmng.customer.CompanyRegEdit;
-import kr.or.dgit.bigdata.swmng.dto.Buyer;
-import kr.or.dgit.bigdata.swmng.dto.Software;
-import kr.or.dgit.bigdata.swmng.service.BuyerService;
-import kr.or.dgit.bigdata.swmng.service.CompanyService;
-import kr.or.dgit.bigdata.swmng.service.SoftwareService;
-import kr.or.dgit.bigdata.swmng.util.ModelForTable;
-import kr.or.dgit.bigdata.swmng.util.ReloadUpdateInterface;
-
-import java.awt.Font;
 import javax.swing.JButton;
-import java.awt.GridLayout;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
-public class BuyerList extends JPanel implements ActionListener, DeleteInterface, ReloadUpdateInterface  {
+import kr.or.dgit.bigdata.swmng.customer.BuyerRegEdit;
+import kr.or.dgit.bigdata.swmng.dto.Buyer;
+import kr.or.dgit.bigdata.swmng.service.BuyerService;
+import kr.or.dgit.bigdata.swmng.util.ModelForTable;
+
+public class BuyerList extends JPanel implements ActionListener, ListInterface  {
 	private JTable buyerList;
 
 	public BuyerList() {
@@ -153,10 +139,5 @@ public class BuyerList extends JPanel implements ActionListener, DeleteInterface
 	}
 	
 
-	@Override
-	public void updateAction(int no) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

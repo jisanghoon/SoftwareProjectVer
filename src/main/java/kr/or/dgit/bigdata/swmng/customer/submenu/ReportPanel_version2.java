@@ -1,10 +1,11 @@
-package kr.or.dgit.bigdata.swmng.customersubmenu;
+package kr.or.dgit.bigdata.swmng.customer.submenu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -38,7 +41,14 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 	private ModelForTable mft;
 
 	public ReportPanel_version2() {
-		setBackground(Color.WHITE);
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel panel = new JPanel();
@@ -88,7 +98,8 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		table.setShowHorizontalLines(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		
+
+
 		revalidate();
 		repaint();
 	}
@@ -131,6 +142,7 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5);
 		mft.resizeColumnWidth(table);
+		
 	}
 
 	protected void rdTradeDetailActionPerformed(ActionEvent e) {

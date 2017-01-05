@@ -15,4 +15,5 @@ public interface BuyerMapper<T> {
 
 	T selectMaxNo();
 
+	List<T> selectShopName();
 }

@@ -1,4 +1,4 @@
-package kr.or.dgit.bigdata.swmng.customersubmenu;
+package kr.or.dgit.bigdata.swmng.customer.submenu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

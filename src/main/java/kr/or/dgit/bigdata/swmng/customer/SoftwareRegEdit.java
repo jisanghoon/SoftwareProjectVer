@@ -22,9 +22,8 @@ import kr.or.dgit.bigdata.swmng.dto.Software;
 import kr.or.dgit.bigdata.swmng.list.SoftwareList;
 import kr.or.dgit.bigdata.swmng.service.CompanyService;
 import kr.or.dgit.bigdata.swmng.service.SoftwareService;
-import kr.or.dgit.bigdata.swmng.util.ReloadUpdateInterface;
 
-public class SoftwareRegEdit extends JPanel implements ActionListener, ReloadUpdateInterface {
+public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditInterface {
 	private JTextField tfSupPrice;
 	private JTextField tfNo;
 	private JTextField tfTitle;
@@ -33,6 +32,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, ReloadUpd
 	private JComboBox cmbCoName;
 	private JButton btnAdd;
 	private JButton btnCancel;
+	private String selectedTitle;
 	private List<Software> softwareList = SoftwareService.getInstance().selectCategory();
 	private List<Company> companyList = CompanyService.getInstance().selectCoName();
 
@@ -184,15 +184,14 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, ReloadUpd
 		gbc_btnCancel.gridx = 1;
 		gbc_btnCancel.gridy = 0;
 		BtnPanel.add(btnCancel, gbc_btnCancel);
-		
-		
+
 		for (Software s : softwareList) {
 			cmbCategory.addItem(s.getCategory());
 		}
 		for (Company c : companyList) {
 			cmbCoName.addItem(c.getCoName());
 		}
-		
+
 		if (e.equals("등록")) {
 			tfNo.setText(SoftwareService.getInstance().selectMaxNo().getNo() + "");
 		} else if (e.equals("수정")) {
@@ -209,7 +208,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, ReloadUpd
 		tfTitle.setText(list.getTitle());
 		tfSupPrice.setText(list.getSupPrice() + "");
 		tfSellPrice.setText(list.getSellPrice() + "");
-		
+		selectedTitle = list.getTitle();
 		for (Software s : softwareList) {
 			cmbCategory.addItem(s.getCategory());
 		}
@@ -234,21 +233,25 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, ReloadUpd
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "등록":
-			SoftwareService.getInstance()
-					.insertItem(new Software(Integer.parseInt(tfNo.getText()), cmbCategory.getSelectedItem() + "",
-							tfTitle.getText().trim(), Integer.parseInt(tfSupPrice.getText().trim()),
-							Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
-			JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
-			refresh(new SoftwareList());
+			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
+				SoftwareService.getInstance()
+						.insertItem(new Software(Integer.parseInt(tfNo.getText()), cmbCategory.getSelectedItem() + "",
+								tfTitle.getText().trim(), Integer.parseInt(tfSupPrice.getText().trim()),
+								Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
+				JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
+				refresh(new SoftwareList());
+			}
 			break;
 		case "수정":
-			btnAdd.setText("등록");
-			SoftwareService.getInstance()
-					.updateItem(new Software(Integer.parseInt(tfNo.getText()), cmbCategory.getSelectedItem() + "",
-							tfTitle.getText().trim(), Integer.parseInt(tfSupPrice.getText().trim()),
-							Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
-			JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
-			refresh(new SoftwareList());
+			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
+				btnAdd.setText("등록");
+				SoftwareService.getInstance()
+						.updateItem(new Software(Integer.parseInt(tfNo.getText()), cmbCategory.getSelectedItem() + "",
+								tfTitle.getText().trim(), Integer.parseInt(tfSupPrice.getText().trim()),
+								Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
+				JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
+				refresh(new SoftwareList());
+			}
 			break;
 
 		case "취소":
@@ -256,6 +259,57 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, ReloadUpd
 			break;
 		}
 
+	}
+
+	@Override
+	public boolean inputValidation() {
+		if (tfNo.getText().equals("") || tfTitle.getText().trim().equals("") || tfSupPrice.getText().trim().equals("")
+				|| tfSellPrice.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "빈칸없이 입력해 주세요");
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean duplicateValidation(String e) {
+		List<Software> list = SoftwareService.getInstance().selectTitle();
+		boolean flag = true;
+
+		switch (e) {
+
+		case "등록":
+			for (Software s : list) {
+				if (tfTitle.getText().trim().equals(s.getTitle())) {
+					flag = false;
+					tfTitle.requestFocus();
+					tfTitle.selectAll();
+					JOptionPane.showMessageDialog(null, "입력하신 품목이름이 중복되었습니다");
+				}
+			}
+			break;
+
+		case "수정":
+			String[] title = new String[list.size()];
+			int idx = 0;
+			for (Software s : list) {
+				if (s.getTitle().equals(selectedTitle) == false) {
+					title[idx] = s.getTitle();
+					idx++;
+				}
+			}
+			for (int i = 0; i < list.size() - 1; i++) {
+				if (title[i].equals(tfTitle.getText().trim())) {
+					flag = false;
+					tfTitle.requestFocus();
+					tfTitle.selectAll();
+					JOptionPane.showMessageDialog(null, "다른 품목이름과 중복되었습니다");
+				}
+			}
+			break;
+		}
+		return flag;
 	}
 
 }

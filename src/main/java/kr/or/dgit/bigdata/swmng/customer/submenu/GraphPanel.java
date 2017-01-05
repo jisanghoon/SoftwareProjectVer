@@ -1,4 +1,4 @@
-package kr.or.dgit.bigdata.swmng.customersubmenu;
+package kr.or.dgit.bigdata.swmng.customer.submenu;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -37,7 +37,7 @@ public class GraphPanel extends JPanel {
 		add(fxPanel, BorderLayout.CENTER);
 
 		JPanel pnBtn = new JPanel();
-		pnBtn.setBackground(java.awt.Color.WHITE);
+	
 		add(pnBtn, BorderLayout.SOUTH);
 
 		JButton btn = new JButton(" 확인 ");
@@ -59,14 +59,16 @@ public class GraphPanel extends JPanel {
 		 Platform.runLater(new Runnable() {
 	            @Override
 	            public void run() {
+	         
 	                initFX(fxPanel);
+	             
 	            }
 	       });
 	}
 	private static void initFX(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
     	 Group  root  =  new  Group();
-    	 Scene  scene  =  new  Scene(root, Color.WHITE);
+    	 Scene  scene  =  new  Scene(root, Color.TRANSPARENT);
          
     	 NumberAxis yAxis = new NumberAxis();
          CategoryAxis xAxis = new CategoryAxis();

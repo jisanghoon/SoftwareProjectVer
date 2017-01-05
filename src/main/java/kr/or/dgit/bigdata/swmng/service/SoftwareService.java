@@ -142,8 +142,6 @@ public class SoftwareService implements SoftwareMapper<Software> {
 		}
 	}
 
-
-
 	@Override
 	public List<Software> selectCategory() {
 		if (logger.isDebugEnabled()) {
@@ -155,6 +153,24 @@ public class SoftwareService implements SoftwareMapper<Software> {
 			List<Software> returnList = softwareDao.selectCategory();
 			if (logger.isDebugEnabled()) {
 				logger.debug("selectCategory() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public List<Software> selectTitle() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectTitle() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		SoftwareMapper softwareDao = sqlSession.getMapper(SoftwareMapper.class);
+		try {
+			List<Software> returnList = softwareDao.selectTitle();
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectTitle() - end");
 			}
 			return returnList;
 		} finally {

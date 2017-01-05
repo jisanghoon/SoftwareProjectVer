@@ -8,4 +8,7 @@ public interface SaleMapper<T> {
 	List<T> selectAllSortDate();
 	List<T> selectAllSortSupplier();
 	List<Map<String,Object>> selectAllGroupByConame();
+	T selectMaxNo();
+	void insertItem(T item);
+	
 }

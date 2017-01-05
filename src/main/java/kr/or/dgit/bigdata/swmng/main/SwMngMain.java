@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import kr.or.dgit.bigdata.swmng.customer.order.SoftwareOrderPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.GraphPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.ReportPanel_version2;
 import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel;
@@ -37,7 +38,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem salesReportOrderByDate;
 	private JMenuItem mnReportList;
 	private JMenuItem orderStatusGraph;
-	
+
 	CompanyList cl;
 	private JLabel lblMainTitle;
 
@@ -82,6 +83,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		menuBar.add(mnOrder);
 		// 주문관리 하위 메뉴
 		softwareOrder = new JMenuItem("소프트웨어 주문");
+		softwareOrder.addActionListener(this);
 		mnOrder.add(softwareOrder);
 
 		// 현황관리 메뉴
@@ -146,9 +148,10 @@ public class SwMngMain extends JFrame implements ActionListener {
 			setLocationRelativeTo(null);
 			break;
 		case "고객별 판매현황":
-			SalesStatusPanel panel = new SalesStatusPanel();
-			contentPane.add(panel, BorderLayout.CENTER);
+			contentPane.add(new SalesStatusPanel(), BorderLayout.CENTER);
 			break;
+		case "소프트웨어 주문":
+			contentPane.add(new SoftwareOrderPanel(), BorderLayout.CENTER);
 
 		}
 		revalidate();

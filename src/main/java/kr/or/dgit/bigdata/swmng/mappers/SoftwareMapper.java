@@ -18,4 +18,6 @@ public interface SoftwareMapper<T> {
 	List<T> selectCategory();
 	
 	List<T> selectTitle();
+	
+	List<T> selectTitleJoinSale(String item);
 }

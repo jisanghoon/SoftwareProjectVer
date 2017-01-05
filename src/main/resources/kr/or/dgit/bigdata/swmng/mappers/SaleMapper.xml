@@ -17,48 +17,43 @@
 	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
 	<select id="selectAll" resultType="Sale" resultMap="SaleResult">
 		SELECT
-		sa.*, so.*,b.* FROM sale sa,software so ,buyer b
-		WHERE sa.shopName =	b.shopName and sa.title = so.title 
+		sa.*,
+		so.*,b.* FROM sale sa,software so ,buyer b
+		WHERE sa.shopName =
+		b.shopName and sa.title = so.title
 		ORDER BY sa.no
-		
-		<!-- SELECT
-		sa.*,so.*,b.* FROM sale sa
-		left JOIN buyer b ON sa.shopName =
-		b.shopName
-		left JOIN software so ON sa.title = so.title
-		ORDER BY sa.no; -->
+	</select>
+	<select id="selectMaxNo" parameterType="int" resultType="Sale">
+		SELECT
+		MAX(no)+1 no FROM sale
 	</select>
 
-	 <select id="selectAllSortDate" resultType="Sale" resultMap="SaleResult">
+	<select id="selectAllSortDate" resultType="Sale" resultMap="SaleResult">
 		SELECT
 		sa.*, so.*,b.* FROM sale sa,software so ,buyer b
-		WHERE sa.shopName =	b.shopName and sa.title = so.title 
-		ORDER BY date, sa.no;
-		
-		
-		<!-- SELECT sa.*,so.*,b.* FROM sale sa
-		left JOIN buyer b ON sa.shopName =
-		b.shopName
-		left JOIN software so ON sa.title = so.title
-		ORDER BY date, sa.no; -->
+		WHERE
+		sa.shopName = b.shopName and sa.title = so.title
+		ORDER BY date, sa.no
 	</select>
 
 	<select id="selectAllSortSupplier" resultType="Sale" resultMap="SaleResult">
 		SELECT
 		sa.*, so.*,b.* FROM sale sa,software so ,buyer b
-		WHERE sa.shopName =	b.shopName and sa.title = so.title 
-		ORDER BY coname,date;
-		
-		
-		<!-- SELECT sa.*,so.*,b.* FROM sale sa
-		left JOIN buyer b ON sa.shopName =
-		b.shopName
-		left JOIN software so ON sa.title = so.title
-		ORDER BY coname,date; -->
+		WHERE
+		sa.shopName = b.shopName and sa.title = so.title
+		ORDER BY coname,date
 	</select>
 
-	 <select id="selectAllGroupByConame" resultType="map">
-		SELECT shopName, sum(orderCount) as totalCnt FROM sale
-		group by shopName;
-	</select>  
+	<select id="selectAllGroupByConame" resultType="map">
+		SELECT shopName,
+		sum(orderCount) as totalCnt FROM sale
+		group by shopName
+	</select>
+
+	<insert id="insertItem" parameterType="Sale">
+		INSERT INTO sale(no,shopname,title,ordercount,payment,date) VALUES(
+		#{no},#{shopName2},#{title2},#{orderCount},#{payment},#{date})
+	</insert>
+
+
 </mapper> 

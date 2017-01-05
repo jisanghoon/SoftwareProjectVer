@@ -178,4 +178,22 @@ public class SoftwareService implements SoftwareMapper<Software> {
 		}
 	}
 
+	@Override
+	public List<Software> selectTitleJoinSale(String item) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectTitleJoinSale() - start");
+		}
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		SoftwareMapper softwareDao = sqlSession.getMapper(SoftwareMapper.class);
+		try {
+			List<Software> returnList = softwareDao.selectTitleJoinSale(item);
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectTitleJoinSale() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+
 }

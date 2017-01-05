@@ -6,10 +6,41 @@ import java.util.Date;
 public class Sale {
 	private int no;
 	private Buyer shopName;
+	private String shopName2;
 	private Software title;
+	private String title2;
 	private int orderCount;
 	private boolean payment;
 	private Date date;
+
+	
+	public Sale(int no, String shopName2, String title2, int orderCount, boolean payment, Date date) {
+		this.no = no;
+		this.shopName2 = shopName2;
+		this.title2 = title2;
+		this.orderCount = orderCount;
+		this.payment = payment;
+		this.date = date;
+	}
+
+	public String getShopName2() {
+		return shopName2;
+	}
+
+	public void setShopName2(String shopName2) {
+		this.shopName2 = shopName2;
+	}
+
+	public String getTitle2() {
+		return title2;
+	}
+
+	public void setTitle2(String title2) {
+		this.title2 = title2;
+	}
+
+
+	
 
 	@Override
 	public String toString() {

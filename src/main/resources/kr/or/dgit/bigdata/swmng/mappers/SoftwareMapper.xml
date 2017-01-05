@@ -33,7 +33,10 @@
 		=
 		#{no}
 	</select>
-
+	<select id="selectTitleJoinSale" resultType="Software">
+		SELECT DISTINCT sw.title FROM software sw,sale s WHERE sw.title=s.title AND
+		s.shopname = #{shopName}
+	</select>
 	<select id="selectMaxNo" parameterType="int" resultType="Software">
 		SELECT
 		MAX(no)+1 no FROM software

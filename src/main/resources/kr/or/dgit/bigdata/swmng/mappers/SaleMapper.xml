@@ -16,12 +16,21 @@
 
 	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
 	<select id="selectAll" resultType="Sale" resultMap="SaleResult">
-		SELECT
-		sa.*,
-		so.*,b.* FROM sale sa,software so ,buyer b
-		WHERE sa.shopName =
-		b.shopName and sa.title = so.title
-		ORDER BY sa.no
+		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
+			= b.shopName and sa.title = so.title ORDER BY sa.no
+	</select>
+	<select id="selectAllOrderByCategory" resultType="Sale" resultMap="SaleResult">
+		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
+			= b.shopName and sa.title = so.title ORDER BY so.category
+	</select>
+	<select id="selectAllOrderByTitle" resultType="Sale" resultMap="SaleResult">
+		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
+			= b.shopName and sa.title = so.title ORDER BY so.title
+	</select>
+	
+	<select id="selectAllOrderByBuyer" resultType="Sale" resultMap="SaleResult">
+		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
+			= b.shopName and sa.title = so.title ORDER BY sa.shopname
 	</select>
 	<select id="selectMaxNo" parameterType="int" resultType="Sale">
 		SELECT
@@ -51,7 +60,8 @@
 	</select>
 
 	<insert id="insertItem" parameterType="Sale">
-		INSERT INTO sale(no,shopname,title,ordercount,payment,date) VALUES(
+		INSERT INTO
+		sale(no,shopname,title,ordercount,payment,date) VALUES(
 		#{no},#{shopName2},#{title2},#{orderCount},#{payment},#{date})
 	</insert>
 

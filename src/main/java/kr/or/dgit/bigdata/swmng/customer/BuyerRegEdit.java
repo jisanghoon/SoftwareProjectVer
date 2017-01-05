@@ -17,10 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
-import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.list.BuyerList;
 import kr.or.dgit.bigdata.swmng.service.BuyerService;
-import kr.or.dgit.bigdata.swmng.service.CompanyService;
 
 public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInterface {
 	private JTextField tfAddress;

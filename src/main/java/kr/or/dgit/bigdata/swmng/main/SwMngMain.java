@@ -22,6 +22,8 @@ import kr.or.dgit.bigdata.swmng.customer.order.SoftwareOrderPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.GraphPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.ReportPanel_version2;
 import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel;
+import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel2;
+import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel3;
 import kr.or.dgit.bigdata.swmng.list.BuyerList;
 import kr.or.dgit.bigdata.swmng.list.CompanyList;
 import kr.or.dgit.bigdata.swmng.list.SoftwareList;
@@ -38,15 +40,17 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JMenuItem salesReportOrderByDate;
 	private JMenuItem mnReportList;
 	private JMenuItem orderStatusGraph;
-
 	CompanyList cl;
 	private JLabel lblMainTitle;
 
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
 					SwMngMain frame = new SwMngMain();
+					new GraphPanel();
 					UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
 					SwingUtilities.updateComponentTreeUI(frame);
 					frame.setVisible(true);
@@ -56,6 +60,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 				}
 			}
 		});
+		
 	}
 
 	public SwMngMain() {
@@ -94,7 +99,9 @@ public class SwMngMain extends JFrame implements ActionListener {
 		salesReportOrderByBuyer = new JMenuItem("고객별 판매현황");
 		salesReportOrderByBuyer.addActionListener(this);
 		salesReportOrderBySW = new JMenuItem("SW별 판매현황");
+		salesReportOrderBySW.addActionListener(this);
 		salesReportOrderByDate = new JMenuItem("날짜별 판매현황");
+		salesReportOrderByDate.addActionListener(this);
 		mnStatement.add(salesReportOrderByBuyer);
 		mnStatement.add(salesReportOrderBySW);
 		mnStatement.add(salesReportOrderByDate);
@@ -124,6 +131,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	
 		contentPane.removeAll();
 		setSize(500, 300);
 
@@ -149,6 +157,13 @@ public class SwMngMain extends JFrame implements ActionListener {
 			break;
 		case "고객별 판매현황":
 			contentPane.add(new SalesStatusPanel(), BorderLayout.CENTER);
+			break;
+		case "SW별 판매현황":
+			contentPane.add(new SalesStatusPanel2(), BorderLayout.CENTER);
+			break;
+		case "날짜별 판매현황":
+			contentPane.add(new SalesStatusPanel3(), BorderLayout.CENTER);
+			
 			break;
 		case "소프트웨어 주문":
 			contentPane.add(new SoftwareOrderPanel(), BorderLayout.CENTER);

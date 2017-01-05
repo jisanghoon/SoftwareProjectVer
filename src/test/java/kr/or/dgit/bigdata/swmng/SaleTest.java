@@ -52,6 +52,26 @@ public class SaleTest {
 	  tempMap.get("shopName"), tempMap.get("totalCnt")) ); }
 	  
 	 }
-	 
+
+	  
+		@Test
+		public void testSelectAllOrderByCategory() {
+			List<Sale> list = ss.selectAllOrderByCategory();
+			Assert.assertNotNull(list);
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i));
+			}
+		}
+		
+		@Test
+		public void testSelectAllOrderByTitle() {
+			List<Sale> list = ss.selectAllOrderByTitle();
+			Assert.assertNotNull(list);
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i));
+			}
+		}
+		
+	
 
 }

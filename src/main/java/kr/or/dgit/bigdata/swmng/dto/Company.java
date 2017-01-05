@@ -17,8 +17,6 @@ public class Company {
 		return String.format("순번:%s, 회사명:%s, 주소:%s, 연락처:%s", no, coName, address, tel);
 	}
 
-
-
 	public Company(int no,String coName, String address, String tel) {
 		super();
 		this.no = no;

@@ -2,10 +2,8 @@ package kr.or.dgit.bigdata.swmng.customer.submenu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -21,16 +19,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
 
 import kr.or.dgit.bigdata.swmng.dto.Sale;
 import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
-import javax.swing.border.EmptyBorder;
 
 public class ReportPanel_version2 extends JPanel implements ActionListener {
 	private JRadioButton rdTotalSale;
@@ -94,8 +89,8 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 			rdTotalSaleActionPerformed(e);
 		}
 		scrollPane.setViewportView(table);
-		table.setShowVerticalLines(false);
-		table.setShowHorizontalLines(false);
+	/*	table.setShowVerticalLines(false);
+		table.setShowHorizontalLines(false);*/
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 

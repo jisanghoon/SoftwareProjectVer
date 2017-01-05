@@ -10,5 +10,7 @@ public interface SaleMapper<T> {
 	List<Map<String,Object>> selectAllGroupByConame();
 	T selectMaxNo();
 	void insertItem(T item);
-	
+	List<T> selectAllOrderByCategory();
+	List<T> selectAllOrderByTitle();
+	List<T> selectAllOrderByBuyer();
 }

@@ -36,16 +36,16 @@ public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInter
 		add(AddPanel, BorderLayout.CENTER);
 		AddPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
 		GridBagLayout gbl_AddPanel = new GridBagLayout();
-		gbl_AddPanel.columnWidths = new int[] { 0, 0, 40, 0, 0, 0, 0, 0, 76 };
+		gbl_AddPanel.columnWidths = new int[] { 0, 0, 0, 40, 0, 0, 0, 0, 0, 76 };
 		gbl_AddPanel.rowHeights = new int[] { 38, 0, 0, 0 };
-		gbl_AddPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		gbl_AddPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		gbl_AddPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		AddPanel.setLayout(gbl_AddPanel);
 
 		JLabel lblTitle = new JLabel("고객 등록");
 		lblTitle.setFont(new Font("돋움", Font.BOLD, 15));
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
-		gbc_lblTitle.gridwidth = 9;
+		gbc_lblTitle.gridwidth = 10;
 		gbc_lblTitle.insets = new Insets(0, 0, 5, 0);
 		gbc_lblTitle.gridx = 0;
 		gbc_lblTitle.gridy = 0;
@@ -58,23 +58,22 @@ public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInter
 		gbc_lbNo.gridx = 0;
 		gbc_lbNo.gridy = 1;
 		AddPanel.add(lbNo, gbc_lbNo);
-
-		tfNo = new JTextField();
-		tfNo.setEditable(false);
-		tfNo.setColumns(10);
-		GridBagConstraints gbc_tfNo = new GridBagConstraints();
-		gbc_tfNo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tfNo.gridwidth = 2;
-		gbc_tfNo.insets = new Insets(0, 0, 5, 5);
-		gbc_tfNo.gridx = 1;
-		gbc_tfNo.gridy = 1;
-		AddPanel.add(tfNo, gbc_tfNo);
+		
+				tfNo = new JTextField();
+				tfNo.setEditable(false);
+				tfNo.setColumns(10);
+				GridBagConstraints gbc_tfNo = new GridBagConstraints();
+				gbc_tfNo.fill = GridBagConstraints.HORIZONTAL;
+				gbc_tfNo.insets = new Insets(0, 0, 5, 5);
+				gbc_tfNo.gridx = 1;
+				gbc_tfNo.gridy = 1;
+				AddPanel.add(tfNo, gbc_tfNo);
 
 		JLabel lblShopName = new JLabel("상 호 명 :");
 		GridBagConstraints gbc_lblShopName = new GridBagConstraints();
 		gbc_lblShopName.anchor = GridBagConstraints.EAST;
 		gbc_lblShopName.insets = new Insets(0, 0, 5, 5);
-		gbc_lblShopName.gridx = 6;
+		gbc_lblShopName.gridx = 7;
 		gbc_lblShopName.gridy = 1;
 		AddPanel.add(lblShopName, gbc_lblShopName);
 
@@ -84,7 +83,7 @@ public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInter
 		gbc_tfShopName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tfShopName.gridwidth = 2;
 		gbc_tfShopName.insets = new Insets(0, 0, 5, 0);
-		gbc_tfShopName.gridx = 7;
+		gbc_tfShopName.gridx = 8;
 		gbc_tfShopName.gridy = 1;
 		AddPanel.add(tfShopName, gbc_tfShopName);
 
@@ -95,22 +94,22 @@ public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInter
 		gbc_lblAddress.gridx = 0;
 		gbc_lblAddress.gridy = 2;
 		AddPanel.add(lblAddress, gbc_lblAddress);
-
-		tfAddress = new JTextField();
-		GridBagConstraints gbc_tfAddress = new GridBagConstraints();
-		gbc_tfAddress.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tfAddress.gridwidth = 4;
-		gbc_tfAddress.insets = new Insets(0, 0, 0, 5);
-		gbc_tfAddress.gridx = 1;
-		gbc_tfAddress.gridy = 2;
-		AddPanel.add(tfAddress, gbc_tfAddress);
-		tfAddress.setColumns(10);
+		
+				tfAddress = new JTextField();
+				GridBagConstraints gbc_tfAddress = new GridBagConstraints();
+				gbc_tfAddress.fill = GridBagConstraints.HORIZONTAL;
+				gbc_tfAddress.gridwidth = 5;
+				gbc_tfAddress.insets = new Insets(0, 0, 0, 5);
+				gbc_tfAddress.gridx = 1;
+				gbc_tfAddress.gridy = 2;
+				AddPanel.add(tfAddress, gbc_tfAddress);
+				tfAddress.setColumns(10);
 
 		JLabel lblTel = new JLabel("전화번호 :");
 		GridBagConstraints gbc_lblTel = new GridBagConstraints();
 		gbc_lblTel.anchor = GridBagConstraints.EAST;
 		gbc_lblTel.insets = new Insets(0, 0, 0, 5);
-		gbc_lblTel.gridx = 6;
+		gbc_lblTel.gridx = 7;
 		gbc_lblTel.gridy = 2;
 		AddPanel.add(lblTel, gbc_lblTel);
 
@@ -119,7 +118,7 @@ public class BuyerRegEdit extends JPanel implements ActionListener, RegEditInter
 		GridBagConstraints gbc_tfTel = new GridBagConstraints();
 		gbc_tfTel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tfTel.gridwidth = 2;
-		gbc_tfTel.gridx = 7;
+		gbc_tfTel.gridx = 8;
 		gbc_tfTel.gridy = 2;
 		AddPanel.add(tfTel, gbc_tfTel);
 

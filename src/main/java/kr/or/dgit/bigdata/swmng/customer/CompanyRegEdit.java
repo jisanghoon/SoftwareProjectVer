@@ -37,7 +37,7 @@ public class CompanyRegEdit extends JPanel implements ActionListener, RegEditInt
 		add(AddPanel, BorderLayout.CENTER);
 		AddPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
 		GridBagLayout gbl_AddPanel = new GridBagLayout();
-		gbl_AddPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 2 };
+		gbl_AddPanel.columnWidths = new int[] { 0, 17, 0, 0, 0, 40, 0, 0, 0, 0, 0, 2 };
 		gbl_AddPanel.rowHeights = new int[] { 38, 0, 0, 0 };
 		gbl_AddPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		gbl_AddPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
@@ -64,7 +64,6 @@ public class CompanyRegEdit extends JPanel implements ActionListener, RegEditInt
 		tfNo.setEditable(false);
 		tfNo.setColumns(10);
 		GridBagConstraints gbc_tfNo = new GridBagConstraints();
-		gbc_tfNo.gridwidth = 3;
 		gbc_tfNo.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tfNo.insets = new Insets(0, 0, 5, 5);
 		gbc_tfNo.gridx = 1;

@@ -3,6 +3,7 @@ package kr.or.dgit.bigdata.swmng.util;
 import java.awt.Component;
 
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -39,7 +40,11 @@ public class ModelForTable extends AbstractTableModel {
 			model.getColumn(idx[i]).setCellRenderer(dtcr);
 		}
 	}
-
+	public void tableHeaderAlignment(JTable table){
+		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+		renderer.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getTableHeader().setDefaultRenderer(renderer);
+	}
 	@Override
 	public int getColumnCount() {
 		return COL_NAMES.length;

@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,6 +23,7 @@ import kr.or.dgit.bigdata.swmng.customer.CompanyRegEdit;
 import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.service.CompanyService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
+import java.awt.Font;
 
 public class CompanyList extends JPanel implements ActionListener, ListInterface {
 	private JButton btnAdd;
@@ -33,6 +35,11 @@ public class CompanyList extends JPanel implements ActionListener, ListInterface
 
 	public CompanyList() {
 		setLayout(new BorderLayout(0, 0));
+
+		JLabel listTitle = new JLabel("공급회사 목록");
+		listTitle.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		listTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		add(listTitle, BorderLayout.NORTH);
 
 		listPanel = new JPanel();
 		listPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -74,23 +81,7 @@ public class CompanyList extends JPanel implements ActionListener, ListInterface
 		gbc_btnDel.gridy = 0;
 		btnPanel.add(btnDel, gbc_btnDel);
 
-		List<Company> list = CompanyService.getInstance().selectAll();
-		String[] COL_NAMES = { "회사번호", "회사명", "주소", "전화번호" };
-		String[][] data = new String[list.size()][COL_NAMES.length];
-		int idx = 0;
-		for (Company c : list) {
-			data[idx][0] = c.getNo() + "";
-			data[idx][1] = c.getCoName();
-			data[idx][2] = c.getAddress();
-			data[idx][3] = c.getTel();
-			idx++;
-		}
-		ModelForTable mft = new ModelForTable(data, COL_NAMES);
-		companyList.setModel(mft);
-		mft.tableCellAlignment(companyList, SwingConstants.CENTER, 0, 3);
-		companyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		mft.resizeColumnWidth(companyList);
-		listPanel.add(new JScrollPane(companyList));
+		createList();
 
 	}
 
@@ -138,6 +129,30 @@ public class CompanyList extends JPanel implements ActionListener, ListInterface
 		add(p);
 		revalidate();
 		repaint();
+	}
+
+	@Override
+	public void createList() {
+		List<Company> list = CompanyService.getInstance().selectAll();
+		String[] COL_NAMES = { "회사번호", "회사명", "주소", "전화번호" };
+		String[][] data = new String[list.size()][COL_NAMES.length];
+		int idx = 0;
+		for (Company c : list) {
+			data[idx][0] = c.getNo() + "";
+			data[idx][1] = c.getCoName();
+			data[idx][2] = c.getAddress();
+			data[idx][3] = c.getTel();
+			idx++;
+		}
+		ModelForTable mft = new ModelForTable(data, COL_NAMES);
+		companyList.setModel(mft);
+		mft.tableCellAlignment(companyList, SwingConstants.CENTER, 0, 3);
+		companyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		mft.resizeColumnWidth(companyList);
+		mft.tableHeaderAlignment(companyList);
+		listPanel.add(new JScrollPane(companyList));
+		companyList.setFont(new Font("돋움", Font.PLAIN, 12));
+
 	}
 
 }

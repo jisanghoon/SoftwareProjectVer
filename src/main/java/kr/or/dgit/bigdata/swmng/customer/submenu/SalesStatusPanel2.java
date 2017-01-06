@@ -120,9 +120,9 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 					temp[idx][0] = c.getTitle().getTitle();
 					temp[idx][1] = c.getTitle().getCategory();
 					temp[idx][2] = c.getShopName().getShopName();
-					temp[idx][3] = supPrice+"";
-					temp[idx][4] = sellPrice + "";
-					temp[idx][5] = profit + "";
+					temp[idx][3] = String.format("%,d", supPrice);
+					temp[idx][4] = String.format("%,d",sellPrice);
+					temp[idx][5] = String.format("%,d",profit);
 					idx++;
 				} else {
 					continue;
@@ -132,9 +132,9 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 				temp[idx][0] = c.getTitle().getTitle();
 				temp[idx][1] = c.getTitle().getCategory();
 				temp[idx][2] = c.getShopName().getShopName();
-				temp[idx][3] = supPrice+"";
-				temp[idx][4] = sellPrice + "";
-				temp[idx][5] = profit + "";
+				temp[idx][3] = String.format("%,d", supPrice);
+				temp[idx][4] = String.format("%,d",sellPrice);
+				temp[idx][5] = String.format("%,d",profit);
 				idx++;
 			}
 		}
@@ -149,10 +149,15 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 			data[i][5] = temp[i][5];
 			
 		}
-
+		
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
-		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 3);
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 1);
+		mft.tableCellAlignment(table, SwingConstants.RIGHT, 3,4,5);
+		mft.resizeColumnWidth(table);
+		mft.tableHeaderAlignment(table);
+		table.setFont(table.getFont().deriveFont(11.0f));
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {

@@ -4,7 +4,6 @@
 <configuration>
 	<properties resource="application.properties" />
 	<typeAliases>
-		
 		<package name="kr.or.dgit.bigdata.swmng.dto" />
 	</typeAliases>
 

@@ -2,8 +2,10 @@ package kr.or.dgit.bigdata.swmng.customer.submenu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -19,15 +21,23 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister.Pack;
 
 import kr.or.dgit.bigdata.swmng.dto.Sale;
+import kr.or.dgit.bigdata.swmng.main.SwMngMain;
 import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
-public class ReportPanel_version2 extends JPanel implements ActionListener {
+public class ReportPanel extends JPanel implements ActionListener {
 	private JRadioButton rdTotalSale;
 	private JRadioButton rdTradeDetail;
 	private JPanel panelForTable;
@@ -35,9 +45,9 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 	private JScrollPane scrollPane;
 	private ModelForTable mft;
 
-	public ReportPanel_version2() {
+	public ReportPanel() {
 		try {
-			UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+			UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaAluOxideLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
@@ -73,37 +83,37 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 		rdTradeDetail.addActionListener(this);
 
 		panelForTable = new JPanel();
-		panelForTable.setBorder(new EmptyBorder(10, 0, 10, 0));
+		panelForTable.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		add(panelForTable, BorderLayout.CENTER);
 		panelForTable.setLayout(new BorderLayout(0, 0));
 		table = new JTable();
 
 		scrollPane = new JScrollPane();
 		panelForTable.add(scrollPane, BorderLayout.CENTER);
+
+		rdTotalSale.setSelected(true);
+		showSoftwareSaleList();
+		scrollPane.setViewportView(table);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
 		if (e.getSource() == rdTradeDetail) {
-			rdTradeDetailActionPerformed(e);
+			showTradeDetailList();
 		} else if (e.getSource() == rdTotalSale) {
-			rdTotalSaleActionPerformed(e);
+			showSoftwareSaleList();
 		}
 		scrollPane.setViewportView(table);
-	/*	table.setShowVerticalLines(false);
-		table.setShowHorizontalLines(false);*/
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
-		revalidate();
-		repaint();
 	}
 
-	protected void rdTotalSaleActionPerformed(ActionEvent e) {
+	private void showSoftwareSaleList() {
 		List<Sale> reportlist = SaleService.getInstance().selectAllSortDate();
-
 		String[] COL_NAMES = { "년월", "분류", "품목명", "주문번호", "주문수량", "판매금액" };
-		String[][] data = new String[reportlist.size() + 2][6];
+		String[][] data = new String[reportlist.size() + 2][COL_NAMES.length];
 		int idx = 0;
 		int total = 0;
 		String beforeDate = "";
@@ -112,7 +122,7 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 
 			String date = format.format(c.getDate());
 			if (beforeDate.equals(date)) {
-				data[idx][0] = "\"";
+				data[idx][0] = "-";
 			} else {
 				data[idx][0] = date;
 				beforeDate = date;
@@ -133,17 +143,18 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
-		table.setPreferredScrollableViewportSize(new Dimension(600, 500)); // 테이블
+
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5);
 		mft.resizeColumnWidth(table);
-		
+		mft.tableHeaderAlignment(table);
+		table.setFont(table.getFont().deriveFont(11.0f));
 	}
 
-	protected void rdTradeDetailActionPerformed(ActionEvent e) {
+	private void showTradeDetailList() {
 		List<Sale> reportlist = SaleService.getInstance().selectAllSortSupplier();
 		String[] COL_NAMES = { "공급회사명", "주문일자", "고객상호", "품명", "수량", "단가", "금액", "세금", "총납품금액" };
-		String[][] data = new String[reportlist.size() + 2][9];
+		String[][] data = new String[reportlist.size() + 2][COL_NAMES.length];
 		int idx = 0;
 		int total = 0;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -156,12 +167,11 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 
 			String coname = c.getTitle().getCoName().getCoName();
 			if (beforeConame.equals(coname)) {
-				data[idx][0] = "\"";
+				data[idx][0] = "-";
 			} else {
 				data[idx][0] = coname;
 				beforeConame = coname;
 			}
-
 			data[idx][1] = format.format(c.getDate());
 			data[idx][2] = c.getShopName().getShopName();
 			data[idx][3] = c.getTitle().getTitle();
@@ -174,16 +184,18 @@ public class ReportPanel_version2 extends JPanel implements ActionListener {
 			idx++;
 		}
 		idx++;
-		data[idx][7] = new String("총 납품금액 합계 :");
+		data[idx][6] = new String("총 납품금액");
+		data[idx][7] = new String(" 합계 :");
+
 		data[idx][8] = String.format("%,d", total);
 
 		ModelForTable mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
-		table.setPreferredScrollableViewportSize(new Dimension(750, 500)); // 테이블
+
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 1, 2, 3, 4);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 5, 6, 7, 8);
 		mft.resizeColumnWidth(table);
-
+		mft.tableHeaderAlignment(table);
+		table.setFont(table.getFont().deriveFont(11.0f));
 	}
-
 }

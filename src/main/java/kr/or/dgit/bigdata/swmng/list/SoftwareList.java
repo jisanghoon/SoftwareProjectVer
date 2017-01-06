@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.swmng.list;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,14 +30,20 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 	private JButton btnUpdate;
 	private JButton btnDel;
 	private JTable softwareList;
+	private JPanel listPanel;
 
 	public SoftwareList() {
 		setLayout(new BorderLayout(0, 0));
 
-		JPanel ListPanel = new JPanel();
-		ListPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		add(ListPanel, BorderLayout.CENTER);
-		ListPanel.setLayout(new BorderLayout(0, 0));
+		JLabel listTitle = new JLabel("소프트웨어 목록");
+		listTitle.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		listTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		add(listTitle, BorderLayout.NORTH);
+		
+		listPanel = new JPanel();
+		listPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		add(listPanel, BorderLayout.CENTER);
+		listPanel.setLayout(new BorderLayout(0, 0));
 
 		JPanel BtnPanel = new JPanel();
 		add(BtnPanel, BorderLayout.SOUTH);
@@ -72,31 +80,9 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 		gbc_btnDel.gridy = 0;
 		BtnPanel.add(btnDel, gbc_btnDel);
 
-		softwareList = new JTable();
-		List<Software> list = SoftwareService.getInstance().selectAll();
-		String[] COL_NAMES = { "품목번호", "분류명", "품목명", "공급가격", "판매가격", "공급회사명" };
-		String[][] data = new String[list.size()][COL_NAMES.length];
-		int idx = 0;
-		for (Software s : list) {
-			data[idx][0] = s.getNo() + "";
-			data[idx][1] = s.getCategory();
-			data[idx][2] = s.getTitle();
-			data[idx][3] = s.getSupPrice() + "";
-			data[idx][4] = s.getSellPrice() + "";
-			data[idx][5] = s.getCoName().getCoName();
-			idx++;
-		}
-		ModelForTable mft = new ModelForTable(data, COL_NAMES);
-		softwareList.setModel(mft);
-		mft.tableCellAlignment(softwareList, SwingConstants.CENTER, 0, 1, 5);
-		mft.tableCellAlignment(softwareList, SwingConstants.RIGHT, 3, 4);
-		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		mft.resizeColumnWidth(softwareList);
-		ListPanel.add(new JScrollPane(softwareList));
+		createList();
 
 	}
-
-	
 
 	@Override
 	public void refresh(JPanel p) {
@@ -143,6 +129,34 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 			}
 			break;
 		}
+	}
+
+	@Override
+	public void createList() {
+		softwareList = new JTable();
+		List<Software> list = SoftwareService.getInstance().selectAll();
+		String[] COL_NAMES = { "품목번호", "분류명", "품목명", "공급가격", "판매가격", "공급회사명" };
+		String[][] data = new String[list.size()][COL_NAMES.length];
+		int idx = 0;
+		for (Software s : list) {
+			data[idx][0] = s.getNo() + "";
+			data[idx][1] = s.getCategory();
+			data[idx][2] = s.getTitle();
+			data[idx][3] = String.format("%,d", s.getSupPrice());
+			data[idx][4] = String.format("%,d", s.getSellPrice());
+			data[idx][5] = s.getCoName().getCoName();
+			idx++;
+		}
+		ModelForTable mft = new ModelForTable(data, COL_NAMES);
+		softwareList.setModel(mft);
+	
+		mft.tableCellAlignment(softwareList, SwingConstants.CENTER, 0, 1, 5);
+		mft.tableCellAlignment(softwareList, SwingConstants.RIGHT, 3, 4);
+		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		mft.resizeColumnWidth(softwareList);
+		mft.tableHeaderAlignment(softwareList);
+		listPanel.add(new JScrollPane(softwareList));
+		softwareList.setFont(softwareList.getFont().deriveFont(12.0f));
 	}
 
 }

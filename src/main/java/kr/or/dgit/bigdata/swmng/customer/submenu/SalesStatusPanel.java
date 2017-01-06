@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
 import kr.or.dgit.bigdata.swmng.dto.Sale;
@@ -74,7 +75,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 
 		btnExit = new JButton("[닫기]");
 		btnExit.addActionListener(this);
-		
+
 		subPnForControl.add(btnExit);
 
 		JPanel PnForTable = new JPanel();
@@ -97,12 +98,12 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 
 	private void refleshTable(boolean isCheck) {
 		List<Sale> list;
-		if (isCheck==CHECK) {
-			 list = SaleService.getInstance().selectAllOrderByBuyer();
+		if (isCheck == CHECK) {
+			list = SaleService.getInstance().selectAllOrderByBuyer();
 		} else {
-			 list = SaleService.getInstance().selectAllOrderByTitle();
+			list = SaleService.getInstance().selectAllOrderByTitle();
 		}
-		
+
 		String[] COL_NAMES = { "고객상호명", "품목명", "주문수량", "입금여부", "판매가격", "매출금", "미수금" };
 
 		String[][] temp = new String[list.size()][COL_NAMES.length];
@@ -114,12 +115,12 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 					rowCnt++;
 					temp[idx][0] = c.getShopName().getShopName();
 					temp[idx][1] = c.getTitle().getTitle();
-					temp[idx][2] = c.getOrderCount() + "";
+					temp[idx][2] = String.format("%,d", c.getOrderCount());
 					temp[idx][3] = !c.isPayment() + "";
-					temp[idx][4] = c.getTitle().getSellPrice() + "";
-					temp[idx][5] = (c.getOrderCount() * c.getTitle().getSellPrice()) + "";
+					temp[idx][4] = String.format("%,d", c.getTitle().getSellPrice());
+					temp[idx][5] = String.format("%,d", (c.getOrderCount() * c.getTitle().getSellPrice()));
 					if (c.isPayment()) {
-						temp[idx][6] = (c.getOrderCount() * c.getTitle().getSellPrice()) + "";
+						temp[idx][6] = String.format("%,d", (c.getOrderCount() * c.getTitle().getSellPrice()));
 					} else {
 						temp[idx][6] = "";
 					}
@@ -131,12 +132,12 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 				rowCnt++;
 				temp[idx][0] = c.getShopName().getShopName();
 				temp[idx][1] = c.getTitle().getTitle();
-				temp[idx][2] = c.getOrderCount() + "";
+				temp[idx][2] = String.format("%,d", c.getOrderCount());
 				temp[idx][3] = !c.isPayment() + "";
-				temp[idx][4] = c.getTitle().getSellPrice() + "";
-				temp[idx][5] = (c.getOrderCount() * c.getTitle().getSellPrice()) + "";
+				temp[idx][4] = String.format("%,d", c.getTitle().getSellPrice());
+				temp[idx][5] = String.format("%,d", (c.getOrderCount() * c.getTitle().getSellPrice()));
 				if (c.isPayment()) {
-					temp[idx][6] = (c.getOrderCount() * c.getTitle().getSellPrice()) + "";
+					temp[idx][6] = String.format("%,d", (c.getOrderCount() * c.getTitle().getSellPrice()));
 				} else {
 					temp[idx][6] = "";
 				}
@@ -157,20 +158,26 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
-		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 3);
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 2, 3);
+		mft.tableCellAlignment(table, SwingConstants.RIGHT, 4, 5, 6);
+		mft.resizeColumnWidth(table);
+		table.setFont(table.getFont().deriveFont(11.0f));
+		mft.tableHeaderAlignment(table);
+	
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if (totalCheck.isSelected()) {
 			refleshTable(CHECK);
 			combo.setEnabled(false);
-		}else if(!totalCheck.isSelected()){
+		} else if (!totalCheck.isSelected()) {
 			refleshTable(UNCHECK);
 			combo.setEnabled(true);
 		}
-		if(e.getSource() == btnExit){
-			
+		if (e.getSource() == btnExit) {
+
 			btnExitActionPerformed(e);
 		}
 	}
@@ -180,7 +187,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 		JLabel lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		this.getParent().add(lblMainTitle,BorderLayout.CENTER);
+		this.getParent().add(lblMainTitle, BorderLayout.CENTER);
 		revalidate();
 	}
 }

@@ -83,7 +83,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 		/*datePanel1.setSize(200, 100);*/
 		subPnForControl.add(datePicker1);
 		datePicker1.setPreferredSize(new Dimension(130, 27));
-		
+		datePanel1.getComponent(0).setPreferredSize(new Dimension(250, 190));
 /*----------------------------------------------------------	*/	
 		
 		JLabel label = new JLabel("~");
@@ -102,7 +102,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 		datePicker2 = new JDatePickerImpl(datePanel2, new DateFomatter());
 		subPnForControl.add(datePicker2);
 		datePicker2.setPreferredSize(new Dimension(130, 27));
-
+		datePanel2.getComponent(0).setPreferredSize(new Dimension(250, 190));
 /*----------------------------------------------------------	*/		
 		btnSearch = new JButton("[검색]");
 		btnSearch.addActionListener(this);
@@ -139,7 +139,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 				data[idx][0] = c.getNo()+"";
 				data[idx][1] = c.getShopName().getShopName();
 				data[idx][2] = c.getTitle().getTitle();
-				data[idx][3] = c.getOrderCount()+"";
+				data[idx][3] = String.format("%,d",c.getOrderCount());
 				data[idx][4] = !c.isPayment() + "";
 				SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
 				date=new Date(c.getDate().getYear(), c.getDate().getMonth()-1, c.getDate().getDay()); 						
@@ -150,6 +150,11 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
+		mft.resizeColumnWidth(table);
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 0,3,4,5);
+		mft.tableHeaderAlignment(table);
+		table.setFont(table.getFont().deriveFont(11.0f));
+		
 	}
 
 	

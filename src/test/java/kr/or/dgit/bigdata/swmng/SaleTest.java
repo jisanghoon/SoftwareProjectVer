@@ -1,5 +1,6 @@
 package kr.or.dgit.bigdata.swmng;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class SaleTest {
 	public static void tearDownAfterClass() throws Exception {
 		ss = null;
 	}
-
+	
 	@Test
 	public void testSelectAll() {
 		List<Sale> list = ss.selectAll();
@@ -47,9 +48,9 @@ public class SaleTest {
 		  List<Map<String, Object>> listmap = ss.selectAllGroupByConame();
 		  	Assert.assertNotNull(listmap);
 	 
-	  for (int i = 0; i < listmap.size(); i++) { Map<String, Object> tempMap =
-	  listmap.get(i); System.out.println( String.format("%s -> %s",
-	  tempMap.get("shopName"), tempMap.get("totalCnt")) ); }
+	  for (int i = 0; i < listmap.size(); i++) { 
+		  Map<String, Object> tempMap =  listmap.get(i); 
+		  System.out.println( String.format("%s -> %s",tempMap.get("shopName"), tempMap.get("totalCnt")) ); }
 	  
 	 }
 
@@ -72,6 +73,18 @@ public class SaleTest {
 			}
 		}
 		
+		
+		@Test
+		public void testSelectBetweenDates() {
+			GregorianCalendar cal1 = new GregorianCalendar(2009,1,1);
+			GregorianCalendar cal2 = new GregorianCalendar(2010,8,1);
+			System.out.println(cal2.getTime());
+			List<Sale> list = ss.selectBetweenDates(cal1.getTime(),cal2.getTime());
+			Assert.assertNotNull(list);
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i));
+			}
+		}
 	
 
 }

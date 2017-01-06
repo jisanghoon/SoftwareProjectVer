@@ -6,9 +6,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -32,16 +31,15 @@ import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.util.DateFomatter;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
-public class SalesStatusPanel3 extends JPanel implements ItemListener, ActionListener {
+public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 	private JTable table;
 	private ModelForTable mft;
 	private final boolean CHECK = true;
 	private final boolean UNCHECK = false;
 	private JButton btnExit;
-	private JTextField textField;
-	private JTextField textField_1;
 	private JDatePickerImpl datePicker1;
 	private JDatePickerImpl datePicker2;
+	private JButton btnSearch;
 
 	/**
 	 * Create the panel.
@@ -70,6 +68,7 @@ public class SalesStatusPanel3 extends JPanel implements ItemListener, ActionLis
 		btnExit = new JButton("[닫기]");
 		btnExit.addActionListener(this);
 		
+		
 /*--------------------------------------------------------*/		
 		
 		UtilDateModel model1 = new UtilDateModel();
@@ -87,13 +86,11 @@ public class SalesStatusPanel3 extends JPanel implements ItemListener, ActionLis
 		
 /*----------------------------------------------------------	*/	
 		
-		
 		JLabel label = new JLabel("~");
 		subPnForControl.add(label);
 		
 /*--------------------------------------------------	*/
 
-		
 		UtilDateModel model2 = new UtilDateModel();
 		Date today2 = new Date();
 		model2.setValue(today2);
@@ -105,11 +102,12 @@ public class SalesStatusPanel3 extends JPanel implements ItemListener, ActionLis
 		datePicker2 = new JDatePickerImpl(datePanel2, new DateFomatter());
 		subPnForControl.add(datePicker2);
 		datePicker2.setPreferredSize(new Dimension(130, 27));
-		
 
 /*----------------------------------------------------------	*/		
-		JButton btnNewButton = new JButton("[검색]");
-		subPnForControl.add(btnNewButton);
+		btnSearch = new JButton("[검색]");
+		btnSearch.addActionListener(this);
+		
+		subPnForControl.add(btnSearch);
 		
 		subPnForControl.add(btnExit);
 
@@ -124,50 +122,58 @@ public class SalesStatusPanel3 extends JPanel implements ItemListener, ActionLis
 		scrollPane.setViewportView(table);
 		refleshTable(UNCHECK);
 	}
-	public void itemStateChanged(ItemEvent e) {
-	}
 
+	@SuppressWarnings("deprecation")
 	private void refleshTable(boolean isCheck) {
-		List<Sale> list = SaleService.getInstance().selectAll();
+		Date former=createDate(datePicker1);
+		Date latter=createDate(datePicker2);
+		Date date;
+		List<Sale> list = SaleService.getInstance().selectBetweenDates(former, latter);
 		String[] COL_NAMES = { "주문번호", "고객상호", "품명", "주문수량", "입금여부", "주문일자"};
-
-		String[][] temp = new String[list.size()][COL_NAMES.length];
+		String[][] data = new String[list.size()][COL_NAMES.length];
 		int idx = 0;
 		int rowCnt = 0;
 		for (Sale c : list) {
 
 				rowCnt++;
-				temp[idx][0] = c.getShopName().getShopName();
-				temp[idx][1] = c.getTitle().getTitle();
-				temp[idx][2] = c.getOrderCount() + "";
-				temp[idx][3] = !c.isPayment() + "";
-				temp[idx][4] = c.getTitle().getSellPrice() + "";
-				temp[idx][5] = (c.getOrderCount() * c.getTitle().getSellPrice()) + "";
+				data[idx][0] = c.getNo()+"";
+				data[idx][1] = c.getShopName().getShopName();
+				data[idx][2] = c.getTitle().getTitle();
+				data[idx][3] = c.getOrderCount()+"";
+				data[idx][4] = !c.isPayment() + "";
+				SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+				date=new Date(c.getDate().getYear(), c.getDate().getMonth()-1, c.getDate().getDay()); 						
+				data[idx][5] = dateFormat.format(date);
 				idx++;
-			
 		}
-		// 행 수 조정을 위한 처리
-		String[][] data = new String[rowCnt][COL_NAMES.length];
-		for (int i = 0; i < data.length; i++) {
-			data[i][0] = temp[i][0];
-			data[i][1] = temp[i][1];
-			data[i][2] = temp[i][2];
-			data[i][3] = temp[i][3];
-			data[i][4] = temp[i][4];
-			data[i][5] = temp[i][5];
-		}
+		
 
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
-		mft.tableCellAlignment(table, SwingConstants.CENTER, 0, 3);
 	}
 
+	
 	public void actionPerformed(ActionEvent e) {
-
-		if(e.getSource() == btnExit){
-			
+		if (e.getSource() == btnExit) {
 			btnExitActionPerformed(e);
 		}
+		if (e.getSource() == btnSearch) {
+			btnSearchActionPerformed(e);
+		}
+	}
+	
+	protected void btnSearchActionPerformed(ActionEvent e) {
+		refleshTable(UNCHECK);
+	}
+
+	private Date createDate(JDatePickerImpl datePicker) {
+		String[]strDate=datePicker.getJFormattedTextField().getText().split("/");
+		int[] numDateArr=new int[3];
+		for (int i = 0; i < strDate.length; i++) {
+			numDateArr[i]=Integer.parseInt(strDate[i]);
+		}
+		GregorianCalendar time = new GregorianCalendar(numDateArr[0],numDateArr[1],numDateArr[2]);
+		return time.getTime();
 	}
 
 	protected void btnExitActionPerformed(ActionEvent e) {

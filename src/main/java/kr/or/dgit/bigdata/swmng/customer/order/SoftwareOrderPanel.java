@@ -237,7 +237,7 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "주문":
-			System.out.println();
+		
 			insertAction();
 			break;
 		}

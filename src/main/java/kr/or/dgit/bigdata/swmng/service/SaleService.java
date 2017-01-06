@@ -1,14 +1,13 @@
 package kr.or.dgit.bigdata.swmng.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
-import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.dto.Sale;
-import kr.or.dgit.bigdata.swmng.mappers.CompanyMapper;
 import kr.or.dgit.bigdata.swmng.mappers.SaleMapper;
 import kr.or.dgit.bigdata.swmng.util.MybatisSessionFactory;
 
@@ -203,5 +202,23 @@ public class SaleService implements SaleMapper<Sale> {
 		}
 	}
 
+	@Override
+	public List<Sale> selectBetweenDates(Date former, Date latter) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("selectBetweenDates() - start");
+		}
 
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		SaleMapper saleDao = sqlSession.getMapper(SaleMapper.class);
+		try {
+			List<Sale> returnList = saleDao.selectBetweenDates(former,latter);
+			if (logger.isDebugEnabled()) {
+				logger.debug("selectBetweenDates() - end");
+			}
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
+	
 }

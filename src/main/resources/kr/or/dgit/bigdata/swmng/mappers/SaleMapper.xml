@@ -59,11 +59,20 @@
 		group by shopName
 	</select>
 
+	<select id="selectBetweenDates" resultMap="SaleResult">
+		select sa.*, so.*,b.* FROM sale sa,software so ,buyer b
+		WHERE sa.shopName = b.shopName and sa.title = so.title	
+		and date &gt;= #{param1} and date &lt;=#{param2}
+		ORDER BY sa.no
+		
+	</select>
+	
 	<insert id="insertItem" parameterType="Sale">
 		INSERT INTO
 		sale(no,shopname,title,ordercount,payment,date) VALUES(
 		#{no},#{shopName2},#{title2},#{orderCount},#{payment},#{date})
 	</insert>
+	
 
 
 </mapper> 

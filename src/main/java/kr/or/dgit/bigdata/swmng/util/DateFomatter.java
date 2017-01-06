@@ -7,8 +7,10 @@ import java.util.Calendar;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
 public class DateFomatter extends AbstractFormatter {
-	private String datePattern = "yyyy/MM/dd/";
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+	 private String datePattern = "yyyy/MM/dd";
+     private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+	     
 
 	@Override
 	public Object stringToValue(String text) throws ParseException {

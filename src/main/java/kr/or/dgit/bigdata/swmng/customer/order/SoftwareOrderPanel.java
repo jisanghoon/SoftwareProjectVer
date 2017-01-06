@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.swmng.customer.order;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,15 +11,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Properties;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
@@ -42,11 +46,16 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 	private JComboBox cmbShopName;
 	private JComboBox cmbTitle;
 	private JDatePickerImpl datePicker;
+	private UtilDateModel model = new UtilDateModel();
+	private Date today = new Date();
+	private JDatePanelImpl datePanel;
+	private JPanel orderPanel;
+	private GridBagConstraints gbc_tfDate;
 
 	public SoftwareOrderPanel() {
 		setLayout(new BorderLayout(0, 0));
 
-		JPanel orderPanel = new JPanel();
+		orderPanel = new JPanel();
 		orderPanel.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		add(orderPanel);
 		GridBagLayout gbl_orderPanel = new GridBagLayout();
@@ -57,7 +66,7 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 		orderPanel.setLayout(gbl_orderPanel);
 
 		JLabel lblPanelTitle = new JLabel("소프트웨어 주문");
-		lblPanelTitle.setFont(new Font("돋움", Font.BOLD, 15));
+		lblPanelTitle.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		GridBagConstraints gbc_lblPanelTitle = new GridBagConstraints();
 		gbc_lblPanelTitle.gridwidth = 5;
 		gbc_lblPanelTitle.insets = new Insets(0, 0, 5, 0);
@@ -91,23 +100,12 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 		gbc_lblDate.gridy = 3;
 		orderPanel.add(lblDate, gbc_lblDate);
 
-		// 날짜 선택
-		UtilDateModel model = new UtilDateModel();
-		Date today = new Date();
-		model.setValue(today);
-		model.setSelected(true);
-		java.util.Properties p = new java.util.Properties();
-		p.put("text.today", "오늘");
-
-		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-		datePicker = new JDatePickerImpl(datePanel, new DateFomatter());
-		GridBagConstraints gbc_tfDate = new GridBagConstraints();
+		gbc_tfDate = new GridBagConstraints();
 		gbc_tfDate.gridheight = 2;
 		gbc_tfDate.insets = new Insets(0, 0, 5, 5);
 		gbc_tfDate.fill = GridBagConstraints.BOTH;
 		gbc_tfDate.gridx = 3;
 		gbc_tfDate.gridy = 3;
-		orderPanel.add(datePicker, gbc_tfDate);
 
 		JLabel lblShopName = new JLabel("고객상호명 : ");
 		GridBagConstraints gbc_lblShopName = new GridBagConstraints();
@@ -217,44 +215,85 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 		gbc_btnClose.gridy = 0;
 		btnPanel.add(btnClose, gbc_btnClose);
 
-		List<Buyer> shopNameList = BuyerService.getInstance().selectShopName();
-		for (Buyer s : shopNameList) {
-			cmbShopName.addItem(s.getShopName());
-		}
 		cmbShopName.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				createTitleList();
 			}
 		});
-
 		createTitleList();
-		GregorianCalendar cal = new GregorianCalendar();
-		tfNo.setText(SaleService.getInstance().selectMaxNo().getNo() + "");
+		resetAction();
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "주문":
-		
 			insertAction();
+			break;
+		case "리셋":
+			resetAction();
+			break;
+		case "닫기":
+			cancelAction();
 			break;
 		}
 	}
 
+	private void cancelAction() {
+		setVisible(false);
+		JLabel lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
+		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
+		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		this.getParent().add(lblMainTitle,BorderLayout.CENTER);
+		revalidate();
+	}
+
+	private void resetAction() {
+		List<Buyer> shopNameList = BuyerService.getInstance().selectShopName();
+		for (Buyer s : shopNameList) {
+			cmbShopName.addItem(s.getShopName());
+		}
+		cmbShopName.setSelectedIndex(0);
+		tfNo.setText(SaleService.getInstance().selectMaxNo().getNo() + "");
+		tfOrderCount.setText("");
+		ckbPayment.setSelected(false);
+		model.setValue(today);
+		model.setSelected(true);
+		Properties p = new Properties();
+		p.put("text.today", "오늘");
+		datePanel = new JDatePanelImpl(model, p);
+		datePicker = new JDatePickerImpl(datePanel, new DateFomatter());
+		datePicker.getJFormattedTextField().setFont(new Font("굴림", Font.PLAIN, 12));
+		datePanel.getComponent(0).setPreferredSize(new Dimension(250, 190));
+		orderPanel.add(datePicker, gbc_tfDate);
+	}
+
 	private void insertAction() {
 		boolean payment;
-		String[] date = datePicker.getJFormattedTextField().getText().split("/");
-		if (ckbPayment.isSelected()) {
-			payment = true;
+		if (tfOrderCount.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "주문수량을 확인해주세요");
+			tfOrderCount.requestFocus();
+			tfOrderCount.selectAll();
+		} else if (tfOrderCount.getText().trim().matches(".*\\D+.*")) {
+			JOptionPane.showMessageDialog(null, "숫자만 입력해 주세요");
+			tfOrderCount.requestFocus();
+			tfOrderCount.selectAll();
 		} else {
-			payment = false;
+			String[] date = datePicker.getJFormattedTextField().getText().split("/");
+			if (ckbPayment.isSelected()) {
+				payment = true;
+			} else {
+				payment = false;
+			}
+			SaleService.getInstance()
+					.insertItem(new Sale(Integer.parseInt(tfNo.getText()), cmbShopName.getSelectedItem() + "",
+							cmbTitle.getSelectedItem() + "", Integer.parseInt(tfOrderCount.getText().trim()), payment,
+							new Date(Integer.parseInt(date[0]) - 1900, Integer.parseInt(date[1]) - 1,
+									Integer.parseInt(date[2]))));
+			JOptionPane.showMessageDialog(null, "주문이 완료 되었습니다");
 		}
-		SaleService.getInstance()
-				.insertItem(new Sale(Integer.parseInt(tfNo.getText()), cmbShopName.getSelectedItem() + "",
-						cmbTitle.getSelectedItem() + "", Integer.parseInt(tfOrderCount.getText().trim()), payment,
-						new Date(Integer.parseInt(date[0])-1900, Integer.parseInt(date[1])-1, Integer.parseInt(date[2]))));
 
 	}
 
@@ -268,6 +307,5 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 				cmbTitle.addItem(sw.getTitle());
 			}
 		}
-
 	}
 }

@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.swmng.main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
@@ -22,7 +23,7 @@ import javax.swing.border.EmptyBorder;
 
 import kr.or.dgit.bigdata.swmng.customer.order.SoftwareOrderPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.GraphPanel;
-import kr.or.dgit.bigdata.swmng.customer.submenu.ReportPanel_version2;
+import kr.or.dgit.bigdata.swmng.customer.submenu.ReportPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel;
 import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel2;
 import kr.or.dgit.bigdata.swmng.customer.submenu.SalesStatusPanel3;
@@ -52,13 +53,14 @@ public class SwMngMain extends JFrame implements ActionListener {
 				try {
 					
 					SwMngMain frame = new SwMngMain();
-					new GraphPanel();
-					UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+					UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaAluOxideLookAndFeel");
 					SwingUtilities.updateComponentTreeUI(frame);
 					frame.setVisible(true);
 					frame.setTitle("소프트웨어 매니지먼트");
+					new GraphPanel();
 				} catch (Exception e) {
 					e.printStackTrace();
+				
 				}
 			}
 		});
@@ -66,14 +68,17 @@ public class SwMngMain extends JFrame implements ActionListener {
 	}
 
 	public SwMngMain() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(700, 400, 500, 300);
+		setBounds(650, 350, 600, 310);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		// 고객관리 메뉴
 		JMenu mnCustomer = new JMenu("고객관리");
+
 		menuBar.add(mnCustomer);
+
 		// 고객관리 하위 메뉴
 		listCompany = new JMenuItem("공급회사 목록");
 		mnCustomer.add(listCompany);
@@ -129,14 +134,14 @@ public class SwMngMain extends JFrame implements ActionListener {
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblMainTitle, BorderLayout.CENTER);
+		setResizable(false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	
 		contentPane.removeAll();
-		setSize(500, 300);
-
+		setSize(600, 310);
 		switch (e.getActionCommand()) {
 		case "공급회사 목록":
 			contentPane.add(new CompanyList(), BorderLayout.CENTER);
@@ -148,14 +153,12 @@ public class SwMngMain extends JFrame implements ActionListener {
 			contentPane.add(new BuyerList(), BorderLayout.CENTER);
 			break;
 		case "판매현황 보고서":
-			contentPane.add(new ReportPanel_version2(), BorderLayout.CENTER);
-			setSize(900, 700);
-			setLocationRelativeTo(null);
+			contentPane.add(new ReportPanel(), BorderLayout.CENTER);
+			setSize(800, 400);
 			break;
 		case "주문현황":
 			contentPane.add(new GraphPanel(), BorderLayout.CENTER);
-			setSize(600, 600);
-			setLocationRelativeTo(null);
+			setSize(520, 500);
 			break;
 		case "고객별 판매현황":
 			contentPane.add(new SalesStatusPanel(), BorderLayout.CENTER);
@@ -164,8 +167,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 			contentPane.add(new SalesStatusPanel2(), BorderLayout.CENTER);
 			break;
 		case "날짜별 판매현황":
-			contentPane.add(new SalesStatusPanel3(), BorderLayout.CENTER);
-			
+			contentPane.add(new SalesStatusPanel3(), BorderLayout.CENTER);	
 			break;
 		case "소프트웨어 주문":
 			contentPane.add(new SoftwareOrderPanel(), BorderLayout.CENTER);
@@ -174,6 +176,16 @@ public class SwMngMain extends JFrame implements ActionListener {
 		revalidate();
 		repaint();
 
+	}
+
+	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
+		java.util.Enumeration keys = UIManager.getDefaults().keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			if (value != null && value instanceof javax.swing.plaf.FontUIResource)
+				UIManager.put(key, f);
+		}
 	}
 
 }

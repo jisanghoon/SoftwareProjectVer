@@ -22,6 +22,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
 import javafx.scene.paint.Color;
 import kr.or.dgit.bigdata.swmng.service.SaleService;
 import javax.swing.border.SoftBevelBorder;
@@ -62,7 +63,7 @@ public class GraphPanel extends JPanel {
 			}
 		});
 		Platform.runLater(new Runnable() {
-			@Override
+	
 			public void run() {
 				initFX(fxPanel);
 			}
@@ -94,6 +95,7 @@ public class GraphPanel extends JPanel {
 		}
 
 		root.getChildren().add(bc);
+		root.getChildren().add(new DatePicker());
 		bc.getData().addAll(series1);
 
 		fxPanel.setScene(scene);

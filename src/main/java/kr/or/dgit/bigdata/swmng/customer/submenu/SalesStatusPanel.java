@@ -20,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
 import kr.or.dgit.bigdata.swmng.dto.Sale;
@@ -86,6 +86,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 		PnForTable.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
+			
 		scrollPane.setViewportView(table);
 		refleshTable(UNCHECK);
 	}
@@ -106,7 +107,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 
 		String[] COL_NAMES = { "고객상호명", "품목명", "주문수량", "입금여부", "판매가격", "매출금", "미수금" };
 
-		String[][] temp = new String[list.size()][COL_NAMES.length];
+		Object[][] temp = new Object[list.size()][COL_NAMES.length];
 		int idx = 0;
 		int rowCnt = 0;
 		for (Sale c : list) {
@@ -116,7 +117,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 					temp[idx][0] = c.getShopName().getShopName();
 					temp[idx][1] = c.getTitle().getTitle();
 					temp[idx][2] = String.format("%,d", c.getOrderCount());
-					temp[idx][3] = !c.isPayment() + "";
+					temp[idx][3] = new Boolean(!c.isPayment());
 					temp[idx][4] = String.format("%,d", c.getTitle().getSellPrice());
 					temp[idx][5] = String.format("%,d", (c.getOrderCount() * c.getTitle().getSellPrice()));
 					if (c.isPayment()) {
@@ -133,7 +134,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 				temp[idx][0] = c.getShopName().getShopName();
 				temp[idx][1] = c.getTitle().getTitle();
 				temp[idx][2] = String.format("%,d", c.getOrderCount());
-				temp[idx][3] = !c.isPayment() + "";
+				temp[idx][3] = new Boolean(!c.isPayment());
 				temp[idx][4] = String.format("%,d", c.getTitle().getSellPrice());
 				temp[idx][5] = String.format("%,d", (c.getOrderCount() * c.getTitle().getSellPrice()));
 				if (c.isPayment()) {
@@ -145,7 +146,7 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 			}
 		}
 		// 행 수 조정을 위한 처리
-		String[][] data = new String[rowCnt][COL_NAMES.length];
+		Object[][] data = new Object[rowCnt][COL_NAMES.length];
 		for (int i = 0; i < data.length; i++) {
 			data[i][0] = temp[i][0];
 			data[i][1] = temp[i][1];
@@ -157,8 +158,10 @@ public class SalesStatusPanel extends JPanel implements ItemListener, ActionList
 		}
 
 		mft = new ModelForTable(data, COL_NAMES);
+		
 		table.setModel(mft);
-		mft.tableCellAlignment(table, SwingConstants.CENTER, 2, 3);
+		table.getColumnModel().getColumn(3).setCellRenderer(table.getDefaultRenderer(Boolean.class));  
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 2);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 4, 5, 6);
 		mft.resizeColumnWidth(table);
 		table.setFont(table.getFont().deriveFont(11.0f));

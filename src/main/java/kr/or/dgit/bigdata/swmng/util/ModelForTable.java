@@ -10,11 +10,11 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 public class ModelForTable extends AbstractTableModel {
-
-	String[][] data;
+	private static final long serialVersionUID = 1L;
+	Object[][] data;
 	String[] COL_NAMES;
 
-	public ModelForTable(String[][] data, String[] cOL_NAMES) {
+	public ModelForTable(Object[][] data, String[] cOL_NAMES) {
 		this.data = data;
 		COL_NAMES = cOL_NAMES;
 	}

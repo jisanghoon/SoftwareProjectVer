@@ -146,7 +146,9 @@ public class BuyerList extends JPanel implements ActionListener, ListInterface {
 		mft.tableCellAlignment(buyerList, SwingConstants.CENTER, 0, 3);
 		buyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mft.resizeColumnWidth(buyerList);
+
 		mft.tableHeaderAlignment(buyerList);
+
 		listPanel.add(new JScrollPane(buyerList));
 		buyerList.setFont(buyerList.getFont().deriveFont(12.0f));
 	}

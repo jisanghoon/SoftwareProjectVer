@@ -72,8 +72,8 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 /*--------------------------------------------------------*/		
 		
 		UtilDateModel model1 = new UtilDateModel();
-		Date today1 = new Date();
-		model1.setValue(today1);
+		GregorianCalendar time = new GregorianCalendar(2009,0,1);
+		model1.setValue(time.getTime());
 		model1.setSelected(true);
 		Properties p1 = new Properties();
 		p1.put("text.today", "오늘");

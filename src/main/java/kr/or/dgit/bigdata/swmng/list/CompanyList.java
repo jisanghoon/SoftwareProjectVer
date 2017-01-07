@@ -149,7 +149,9 @@ public class CompanyList extends JPanel implements ActionListener, ListInterface
 		mft.tableCellAlignment(companyList, SwingConstants.CENTER, 0, 3);
 		companyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mft.resizeColumnWidth(companyList);
+
 		mft.tableHeaderAlignment(companyList);
+
 		listPanel.add(new JScrollPane(companyList));
 		companyList.setFont(new Font("돋움", Font.PLAIN, 12));
 

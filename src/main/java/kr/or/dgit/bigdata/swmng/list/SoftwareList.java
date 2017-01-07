@@ -154,7 +154,9 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 		mft.tableCellAlignment(softwareList, SwingConstants.RIGHT, 3, 4);
 		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mft.resizeColumnWidth(softwareList);
+
 		mft.tableHeaderAlignment(softwareList);
+
 		listPanel.add(new JScrollPane(softwareList));
 		softwareList.setFont(softwareList.getFont().deriveFont(12.0f));
 	}

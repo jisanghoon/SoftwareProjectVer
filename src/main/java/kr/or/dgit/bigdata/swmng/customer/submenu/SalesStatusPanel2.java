@@ -154,7 +154,8 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 		table.setModel(mft);
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 1);
 		mft.tableCellAlignment(table, SwingConstants.RIGHT, 3,4,5);
-		mft.resizeColumnWidth(table);
+	//	mft.resizeColumnWidth(table);
+		
 		mft.tableHeaderAlignment(table);
 		table.setFont(table.getFont().deriveFont(11.0f));
 		

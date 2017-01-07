@@ -20,7 +20,6 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 
 import kr.or.dgit.bigdata.swmng.dto.Buyer;
 import kr.or.dgit.bigdata.swmng.dto.Sale;

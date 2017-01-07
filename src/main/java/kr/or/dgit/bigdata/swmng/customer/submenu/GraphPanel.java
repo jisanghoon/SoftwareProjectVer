@@ -95,7 +95,6 @@ public class GraphPanel extends JPanel {
 		}
 
 		root.getChildren().add(bc);
-		root.getChildren().add(new DatePicker());
 		bc.getData().addAll(series1);
 
 		fxPanel.setScene(scene);

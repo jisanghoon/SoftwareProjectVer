@@ -31,7 +31,7 @@ import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.util.DateFomatter;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
-public class SalesStatusPanel3 extends JPanel implements ActionListener  {
+public class SalesStatusPanel3 extends JPanel implements ActionListener{
 	private JTable table;
 	private ModelForTable mft;
 	private final boolean CHECK = true;
@@ -40,6 +40,8 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 	private JDatePickerImpl datePicker1;
 	private JDatePickerImpl datePicker2;
 	private JButton btnSearch;
+	private JButton btn2;
+	private JButton btn;
 
 	/**
 	 * Create the panel.
@@ -80,6 +82,11 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 
 		JDatePanelImpl datePanel1 = new JDatePanelImpl(model1, p1);
 		datePicker1 = new JDatePickerImpl(datePanel1, new DateFomatter());
+		btn = (JButton) (datePicker1.getComponent(1));
+
+		System.out.println(datePanel1.getComponent(0));
+			
+		
 		/*datePanel1.setSize(200, 100);*/
 		subPnForControl.add(datePicker1);
 		datePicker1.setPreferredSize(new Dimension(130, 27));
@@ -100,6 +107,12 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(model2, p2);
 		datePicker2 = new JDatePickerImpl(datePanel2, new DateFomatter());
+		btn2 = (JButton) (datePicker2.getComponent(1));
+		btn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		subPnForControl.add(datePicker2);
 		datePicker2.setPreferredSize(new Dimension(130, 27));
 		datePanel2.getComponent(0).setPreferredSize(new Dimension(250, 190));
@@ -130,7 +143,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 		Date date;
 		List<Sale> list = SaleService.getInstance().selectBetweenDates(former, latter);
 		String[] COL_NAMES = { "주문번호", "고객상호", "품명", "주문수량", "입금여부", "주문일자"};
-		String[][] data = new String[list.size()][COL_NAMES.length];
+		Object[][] data = new Object[list.size()][COL_NAMES.length];
 		int idx = 0;
 		int rowCnt = 0;
 		for (Sale c : list) {
@@ -140,7 +153,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 				data[idx][1] = c.getShopName().getShopName();
 				data[idx][2] = c.getTitle().getTitle();
 				data[idx][3] = String.format("%,d",c.getOrderCount());
-				data[idx][4] = !c.isPayment() + "";
+				data[idx][4] = new Boolean(!c.isPayment());
 				SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
 				date=new Date(c.getDate().getYear(), c.getDate().getMonth()-1, c.getDate().getDay()); 						
 				data[idx][5] = dateFormat.format(date);
@@ -150,8 +163,9 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
+		table.getColumnModel().getColumn(4).setCellRenderer(table.getDefaultRenderer(Boolean.class));
 		mft.resizeColumnWidth(table);
-		mft.tableCellAlignment(table, SwingConstants.CENTER, 0,3,4,5);
+		mft.tableCellAlignment(table, SwingConstants.CENTER, 0,3,5);
 		mft.tableHeaderAlignment(table);
 		table.setFont(table.getFont().deriveFont(11.0f));
 		
@@ -159,6 +173,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener  {
 
 	
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getSource() == btnExit) {
 			btnExitActionPerformed(e);
 		}

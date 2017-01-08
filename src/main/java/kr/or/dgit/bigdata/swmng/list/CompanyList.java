@@ -25,6 +25,7 @@ import kr.or.dgit.bigdata.swmng.service.CompanyService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 import java.awt.Font;
 
+@SuppressWarnings("serial")
 public class CompanyList extends JPanel implements ActionListener, ListInterface {
 	private JButton btnAdd;
 	private JButton btnUpdate;

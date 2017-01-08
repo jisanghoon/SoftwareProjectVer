@@ -3,6 +3,7 @@ package kr.or.dgit.bigdata.swmng.customer.submenu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -27,14 +29,18 @@ import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.service.SoftwareService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
-public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionListener{
-	private JComboBox combo;
+@SuppressWarnings("serial")
+public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionListener {
+	private JComboBox<String> combo;
 	private JTable table;
 	private ModelForTable mft;
 	private JCheckBox totalCheck;
 	private final boolean CHECK = true;
 	private final boolean UNCHECK = false;
 	private JButton btnExit;
+	private JTextField txtTotalSales;
+	private JTextField txtTotalUnpaid;
+
 	/**
 	 * Create the panel.
 	 */
@@ -58,9 +64,9 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 		JLabel lblCombo = new JLabel("품목명 : ");
 		subPnForControl.add(lblCombo);
 
-		combo = new JComboBox();
+		combo = new JComboBox<String>();
 
-		List<Software> list =SoftwareService.getInstance().selectAll();
+		List<Software> list = SoftwareService.getInstance().selectAll();
 		for (int i = 0; i < list.size(); i++) {
 			combo.addItem(list.get(i).getTitle());
 		}
@@ -73,7 +79,7 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 
 		btnExit = new JButton("[닫기]");
 		btnExit.addActionListener(this);
-		
+
 		subPnForControl.add(btnExit);
 
 		JPanel PnForTable = new JPanel();
@@ -85,8 +91,38 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 
 		table = new JTable();
 		scrollPane.setViewportView(table);
+
+		JPanel resultPanel = new JPanel();
+		resultPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+		PnForTable.add(resultPanel, BorderLayout.SOUTH);
+		resultPanel.setLayout(new GridLayout(0, 4, 0, 0));
+
+		JLabel lblTotalSales = new JLabel();
+		lblTotalSales.setText("판매금액 합계 : ");
+		lblTotalSales.setHorizontalAlignment(SwingConstants.RIGHT);
+		resultPanel.add(lblTotalSales);
+
+		txtTotalSales = new JTextField();
+		txtTotalSales.setEnabled(true);
+		txtTotalSales.setEditable(false);
+		txtTotalSales.setHorizontalAlignment(SwingConstants.RIGHT);
+		resultPanel.add(txtTotalSales);
+		txtTotalSales.setColumns(10);
+
+		JLabel lblUnpaid = new JLabel();
+		lblUnpaid.setText("판매이윤 합계 : ");
+		lblUnpaid.setHorizontalAlignment(SwingConstants.RIGHT);
+		resultPanel.add(lblUnpaid);
+
+		txtTotalUnpaid = new JTextField();
+		txtTotalUnpaid.setEditable(false);
+		txtTotalUnpaid.setEnabled(true);
+		txtTotalUnpaid.setHorizontalAlignment(SwingConstants.RIGHT);
+		resultPanel.add(txtTotalUnpaid);
+		txtTotalUnpaid.setColumns(10);
 		refleshTable(UNCHECK);
 	}
+
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() == combo) {
 			refleshTable(UNCHECK);
@@ -94,26 +130,27 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 	}
 
 	private void refleshTable(boolean isCheck) {
-		
+
 		List<Sale> list;
-		if (isCheck==CHECK) {
-			 list = SaleService.getInstance().selectAllOrderByTitle();
+		if (isCheck == CHECK) {
+			list = SaleService.getInstance().selectAllOrderByTitle();
 		} else {
-			 list = SaleService.getInstance().selectAllOrderByCategory();
+			list = SaleService.getInstance().selectAllOrderByCategory();
 		}
 
-		
-		String[] COL_NAMES = { "품목명", "분류", "공급회사명", "공급금액", "판매금액", "판매이윤"};
+		String[] COL_NAMES = { "품목명", "분류", "공급회사명", "공급금액", "판매금액", "판매이윤" };
 
 		String[][] temp = new String[list.size()][COL_NAMES.length];
 		int idx = 0;
 		int rowCnt = 0;
+		int sum1 = 0;// 판매금액 합계
+		int sum2 = 0;// 판매이윤 합계
 		for (Sale c : list) {
-			int cnt=c.getOrderCount();//상품 개수
-			int supPrice=c.getTitle().getSupPrice()*cnt;//
-			int sellPrice=c.getTitle().getSellPrice()*cnt;//판매가
-			int profit=sellPrice-supPrice;
-			
+			int cnt = c.getOrderCount();// 상품 개수
+			int supPrice = c.getTitle().getSupPrice() * cnt;//
+			int sellPrice = c.getTitle().getSellPrice() * cnt;// 판매가
+			int profit = sellPrice - supPrice;
+
 			if (isCheck == UNCHECK) {
 				if (combo.getSelectedItem().equals(c.getTitle().getTitle())) {
 					rowCnt++;
@@ -121,8 +158,10 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 					temp[idx][1] = c.getTitle().getCategory();
 					temp[idx][2] = c.getShopName().getShopName();
 					temp[idx][3] = String.format("%,d", supPrice);
-					temp[idx][4] = String.format("%,d",sellPrice);
-					temp[idx][5] = String.format("%,d",profit);
+					temp[idx][4] = String.format("%,d", sellPrice);
+					temp[idx][5] = String.format("%,d", profit);
+					sum1 += sellPrice;
+					sum2 += profit;
 					idx++;
 				} else {
 					continue;
@@ -133,8 +172,10 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 				temp[idx][1] = c.getTitle().getCategory();
 				temp[idx][2] = c.getShopName().getShopName();
 				temp[idx][3] = String.format("%,d", supPrice);
-				temp[idx][4] = String.format("%,d",sellPrice);
-				temp[idx][5] = String.format("%,d",profit);
+				temp[idx][4] = String.format("%,d", sellPrice);
+				temp[idx][5] = String.format("%,d", profit);
+				sum1 += sellPrice;
+				sum2 += profit;
 				idx++;
 			}
 		}
@@ -147,31 +188,48 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 			data[i][3] = temp[i][3];
 			data[i][4] = temp[i][4];
 			data[i][5] = temp[i][5];
-			
+
 		}
-		
+
 		mft = new ModelForTable(data, COL_NAMES);
 		table.setModel(mft);
 		mft.tableCellAlignment(table, SwingConstants.CENTER, 1);
-		mft.tableCellAlignment(table, SwingConstants.RIGHT, 3,4,5);
-	//	mft.resizeColumnWidth(table);
-		
+		mft.tableCellAlignment(table, SwingConstants.RIGHT, 3, 4, 5);
+		mft.resizeColumnWidth(table);
+
 		mft.tableHeaderAlignment(table);
 		table.setFont(table.getFont().deriveFont(11.0f));
-		
+
+		if (sum1 == 0) {
+			txtTotalSales.setText(String.format("%s", "-"));
+			txtTotalUnpaid.setText(String.format("%,d", sum2));
+			txtTotalSales.setHorizontalAlignment(SwingConstants.CENTER);
+		} else if (sum2 == 0) {
+			txtTotalSales.setText(String.format("%,d", sum1));
+			txtTotalUnpaid.setText(String.format("%s", "-"));
+			txtTotalUnpaid.setHorizontalAlignment(SwingConstants.CENTER);
+
+		} else {
+			txtTotalSales.setText(String.format("%,d", sum1));
+			txtTotalUnpaid.setText(String.format("%,d", sum2));
+			txtTotalUnpaid.setHorizontalAlignment(SwingConstants.RIGHT);
+			txtTotalSales.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		}
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if (totalCheck.isSelected()) {
 			refleshTable(CHECK);
 			combo.setEnabled(false);
-		}else if(!totalCheck.isSelected()){
+		} else if (!totalCheck.isSelected()) {
 			refleshTable(UNCHECK);
 			combo.setEnabled(true);
 		}
-		if(e.getSource() == btnExit){
-			
+		if (e.getSource() == btnExit) {
+
 			btnExitActionPerformed(e);
 		}
 	}
@@ -181,7 +239,7 @@ public class SalesStatusPanel2 extends JPanel implements ItemListener, ActionLis
 		JLabel lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		this.getParent().add(lblMainTitle,BorderLayout.CENTER);
+		this.getParent().add(lblMainTitle, BorderLayout.CENTER);
 		revalidate();
 	}
 }

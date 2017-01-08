@@ -27,6 +27,7 @@ import kr.or.dgit.bigdata.swmng.dto.Sale;
 import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
+@SuppressWarnings("serial")
 public class ReportPanel extends JPanel implements ActionListener {
 	private JRadioButton rdTotalSale;
 	private JRadioButton rdTradeDetail;

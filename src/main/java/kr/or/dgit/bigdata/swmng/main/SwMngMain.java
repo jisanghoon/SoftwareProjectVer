@@ -155,7 +155,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 			break;
 		case "주문현황":
 			contentPane.add(new GraphPanel(), BorderLayout.CENTER);
-			setSize(520, 500);
+			setSize(530, 500);
 			break;
 		case "고객별 판매현황":
 			contentPane.add(new SalesStatusPanel(), BorderLayout.CENTER);

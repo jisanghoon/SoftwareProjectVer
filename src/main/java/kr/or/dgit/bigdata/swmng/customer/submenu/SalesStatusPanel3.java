@@ -31,6 +31,7 @@ import kr.or.dgit.bigdata.swmng.service.SaleService;
 import kr.or.dgit.bigdata.swmng.util.DateFomatter;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
+@SuppressWarnings("serial")
 public class SalesStatusPanel3 extends JPanel implements ActionListener{
 	private JTable table;
 	private ModelForTable mft;
@@ -155,6 +156,7 @@ public class SalesStatusPanel3 extends JPanel implements ActionListener{
 				data[idx][3] = String.format("%,d",c.getOrderCount());
 				data[idx][4] = new Boolean(!c.isPayment());
 				SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+			
 				date=new Date(c.getDate().getYear(), c.getDate().getMonth()-1, c.getDate().getDay()); 						
 				data[idx][5] = dateFormat.format(date);
 				idx++;

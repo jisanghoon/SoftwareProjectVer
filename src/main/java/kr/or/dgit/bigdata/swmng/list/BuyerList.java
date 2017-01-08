@@ -25,6 +25,7 @@ import kr.or.dgit.bigdata.swmng.dto.Buyer;
 import kr.or.dgit.bigdata.swmng.service.BuyerService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
+@SuppressWarnings("serial")
 public class BuyerList extends JPanel implements ActionListener, ListInterface {
 	private JTable buyerList;
 	private JPanel listPanel;

@@ -25,6 +25,7 @@ import kr.or.dgit.bigdata.swmng.dto.Software;
 import kr.or.dgit.bigdata.swmng.service.SoftwareService;
 import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 
+@SuppressWarnings("serial")
 public class SoftwareList extends JPanel implements ActionListener, ListInterface {
 	private JButton btnAdd;
 	private JButton btnUpdate;

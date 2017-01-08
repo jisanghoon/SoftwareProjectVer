@@ -7,15 +7,20 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import kr.or.dgit.bigdata.swmng.dto.Company;
 import kr.or.dgit.bigdata.swmng.dto.Software;
@@ -35,6 +40,12 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 	private String selectedTitle;
 	private List<Software> softwareList = SoftwareService.getInstance().selectCategory();
 	private List<Company> companyList = CompanyService.getInstance().selectCoName();
+	private JLabel lblTitle;
+	private JLabel lblTitlePic;
+	private JButton btnOpen;
+	private JLabel lblPreview;
+	private JLabel lblPicPreview;
+	private JFileChooser jfc;
 
 	public SoftwareRegEdit(String e, int flag) {
 		setLayout(new BorderLayout(0, 0));
@@ -44,12 +55,12 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		AddPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
 		GridBagLayout gbl_AddPanel = new GridBagLayout();
 		gbl_AddPanel.columnWidths = new int[] { 40, 0, 0, 0, 0, 0, 2 };
-		gbl_AddPanel.rowHeights = new int[] { 38, 0, 0, 0, 0 };
-		gbl_AddPanel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 1.0 };
-		gbl_AddPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_AddPanel.rowHeights = new int[] { 38, 0, 0, 0, 0, 0, 90, 0 };
+		gbl_AddPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
+		gbl_AddPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		AddPanel.setLayout(gbl_AddPanel);
 
-		JLabel lblTitle = new JLabel("소프트웨어 등록");
+		lblTitle = new JLabel("소프트웨어 등록");
 		lblTitle.setFont(new Font("돋움", Font.BOLD, 15));
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
 		gbc_lblTitle.gridwidth = 7;
@@ -128,7 +139,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		JLabel lblSupPrice = new JLabel("공급가격 :");
 		GridBagConstraints gbc_lblSupPrice = new GridBagConstraints();
 		gbc_lblSupPrice.anchor = GridBagConstraints.EAST;
-		gbc_lblSupPrice.insets = new Insets(0, 0, 0, 5);
+		gbc_lblSupPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSupPrice.gridx = 1;
 		gbc_lblSupPrice.gridy = 3;
 		AddPanel.add(lblSupPrice, gbc_lblSupPrice);
@@ -136,7 +147,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		tfSupPrice = new JTextField();
 		GridBagConstraints gbc_tfSupPrice = new GridBagConstraints();
 		gbc_tfSupPrice.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tfSupPrice.insets = new Insets(0, 0, 0, 5);
+		gbc_tfSupPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_tfSupPrice.gridx = 2;
 		gbc_tfSupPrice.gridy = 3;
 		AddPanel.add(tfSupPrice, gbc_tfSupPrice);
@@ -145,7 +156,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		JLabel lblSellPrice = new JLabel("판매가격 :");
 		GridBagConstraints gbc_lblSellPrice = new GridBagConstraints();
 		gbc_lblSellPrice.anchor = GridBagConstraints.EAST;
-		gbc_lblSellPrice.insets = new Insets(0, 0, 0, 5);
+		gbc_lblSellPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSellPrice.gridx = 4;
 		gbc_lblSellPrice.gridy = 3;
 		AddPanel.add(lblSellPrice, gbc_lblSellPrice);
@@ -153,11 +164,43 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		tfSellPrice = new JTextField();
 		tfSellPrice.setColumns(10);
 		GridBagConstraints gbc_tfSellPrice = new GridBagConstraints();
-		gbc_tfSellPrice.insets = new Insets(0, 0, 0, 5);
+		gbc_tfSellPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_tfSellPrice.fill = GridBagConstraints.HORIZONTAL;
 		gbc_tfSellPrice.gridx = 5;
 		gbc_tfSellPrice.gridy = 3;
 		AddPanel.add(tfSellPrice, gbc_tfSellPrice);
+
+		lblTitlePic = new JLabel("파일선택 :");
+		GridBagConstraints gbc_lblTitlePic = new GridBagConstraints();
+		gbc_lblTitlePic.anchor = GridBagConstraints.EAST;
+		gbc_lblTitlePic.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTitlePic.gridx = 1;
+		gbc_lblTitlePic.gridy = 4;
+		AddPanel.add(lblTitlePic, gbc_lblTitlePic);
+
+		btnOpen = new JButton("파일선택");
+		btnOpen.addActionListener(this);
+		GridBagConstraints gbc_btnAddPic = new GridBagConstraints();
+		gbc_btnAddPic.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAddPic.gridx = 2;
+		gbc_btnAddPic.gridy = 4;
+		AddPanel.add(btnOpen, gbc_btnAddPic);
+
+		lblPreview = new JLabel("미리보기 :");
+		GridBagConstraints gbc_lblPreview = new GridBagConstraints();
+		gbc_lblPreview.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPreview.gridx = 1;
+		gbc_lblPreview.gridy = 5;
+		AddPanel.add(lblPreview, gbc_lblPreview);
+
+		lblPicPreview = new JLabel("");
+		GridBagConstraints gbc_lblPreviewPic = new GridBagConstraints();
+		gbc_lblPreviewPic.gridheight = 2;
+		gbc_lblPreviewPic.gridwidth = 4;
+		gbc_lblPreviewPic.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPreviewPic.gridx = 2;
+		gbc_lblPreviewPic.gridy = 5;
+		AddPanel.add(lblPicPreview, gbc_lblPreviewPic);
 
 		JPanel BtnPanel = new JPanel();
 		add(BtnPanel, BorderLayout.SOUTH);
@@ -185,6 +228,13 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		gbc_btnCancel.gridy = 0;
 		BtnPanel.add(btnCancel, gbc_btnCancel);
 
+		// 파일선택창 생성
+		jfc = new JFileChooser();
+		jfc.setFileFilter(new FileNameExtensionFilter("JPG & GIF & PNG Images", "jpg", "gif", "png"));
+		jfc.setMultiSelectionEnabled(false);
+		jfc.setDialogTitle("사진을 선택하세요");
+
+		// 등록을 위한 카테고리와 공급회사 목록 콤보박스에 추가
 		for (Software s : softwareList) {
 			cmbCategory.addItem(s.getCategory());
 		}
@@ -192,9 +242,17 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 			cmbCoName.addItem(c.getCoName());
 		}
 
+		// 목록에서 등록 or 수정 버튼이 작동되었는지 여부에 따라 수행
 		if (e.equals("등록")) {
-			tfNo.setText(SoftwareService.getInstance().selectMaxNo().getNo() + "");
+			lblTitle.setText("소프트웨어 등록");
+			try {
+				tfNo.setText(SoftwareService.getInstance().selectMaxNo().getNo() + "");
+			} catch (NullPointerException e2) {
+				tfNo.setText("1");
+			}
+
 		} else if (e.equals("수정")) {
+			lblTitle.setText("소프트웨어 정보 수정");
 			updateAction(flag);
 		}
 
@@ -202,6 +260,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 
 	@Override
 	public void updateAction(int no) {
+		// 리스트에서 선택된 해당 항목에 대한 정보를 가져옴
 		btnAdd.setText("수정");
 		Software list = SoftwareService.getInstance().selectByNo(no);
 		tfNo.setText(list.getNo() + "");
@@ -209,12 +268,19 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 		tfSupPrice.setText(list.getSupPrice() + "");
 		tfSellPrice.setText(list.getSellPrice() + "");
 		selectedTitle = list.getTitle();
+		// 선택된 해당항목의 이미지값이 있을시 이미지 미리보기 생성
+		if (list.getPicPath() != null) {
+			lblPicPreview.setIcon(new ImageIcon(new ImageIcon((byte[]) list.getPicPath()).getImage()
+					.getScaledInstance(200, 150, java.awt.Image.SCALE_SMOOTH)));
+		}
+
 		for (Software s : softwareList) {
 			cmbCategory.addItem(s.getCategory());
 		}
 		for (Company c : companyList) {
 			cmbCoName.addItem(c.getCoName());
 		}
+		// 카테고리 콤보박스에 선택된 항목에 대한 공급회사를 가져옴
 		cmbCategory.setSelectedItem(list.getCategory());
 		cmbCoName.setSelectedItem(list.getCoName().getCoName());
 		revalidate();
@@ -223,6 +289,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 
 	@Override
 	public void refresh(JPanel p) {
+		// 패널값을 가져와 새로고침
 		removeAll();
 		add(p);
 		revalidate();
@@ -231,29 +298,75 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnOpen) {
+			// 파일선택후 확인을 누를시
+			if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				//선택한 파일의 확장자명을 가져와 비교
+				String[] path = jfc.getSelectedFile().getPath().split("\\.");
+				if (path[path.length - 1].equals("jpg") || path[path.length - 1].equals("gif")
+						|| path[path.length - 1].equals("png")) {
+					lblPicPreview.setIcon(new ImageIcon(new ImageIcon(jfc.getSelectedFile().getPath()).getImage()
+							.getScaledInstance(200, 150, java.awt.Image.SCALE_SMOOTH)));
+				} else {
+					jfc.setSelectedFile(null);
+					JOptionPane.showMessageDialog(null, "지원하지 않는 형식의 파일 입니다");
+				}
+
+			}
+		}
+		// 빈칸과 중복여부 통과후 제품 등록 및 수정
 		switch (e.getActionCommand()) {
 		case "등록":
 			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
-				SoftwareService.getInstance()
-						.insertItem(new Software(Integer.parseInt(tfNo.getText()), cmbCategory.getSelectedItem() + "",
-								tfTitle.getText().trim(), Integer.parseInt(tfSupPrice.getText().trim()),
+				try {
+					// 선택한 이미지 파일이 없을시 null 있을시 이미지값을 등록
+					if (jfc.getSelectedFile() == null) {
+						SoftwareService.getInstance().insertItem(new Software(Integer.parseInt(tfNo.getText()),
+								cmbCategory.getSelectedItem() + "", tfTitle.getText().trim(), null,
+								Integer.parseInt(tfSupPrice.getText().trim()),
 								Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
-				JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
-				refresh(new SoftwareList());
+					} else {
+						SoftwareService.getInstance().insertItem(new Software(Integer.parseInt(tfNo.getText()),
+								cmbCategory.getSelectedItem() + "", tfTitle.getText().trim(),
+								Files.readAllBytes(new File(jfc.getSelectedFile().toString()).toPath()),
+								Integer.parseInt(tfSupPrice.getText().trim()),
+								Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
+					}
+					JOptionPane.showMessageDialog(null, "등록이 완료되었습니다.");
+
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				} finally {
+					refresh(new SoftwareList());
+				}
 			}
 			break;
 		case "수정":
 			if (inputValidation() && duplicateValidation(e.getActionCommand())) {
 				btnAdd.setText("등록");
-				SoftwareService.getInstance()
-						.updateItem(new Software(Integer.parseInt(tfNo.getText()), cmbCategory.getSelectedItem() + "",
-								tfTitle.getText().trim(), Integer.parseInt(tfSupPrice.getText().trim()),
+				try {
+					//수정할 데이터의 이미지값을 변경시 새로운 이미지로
+					//수정할 데이터의 이미지값을 변경하지 않을시 기존 이미지 보존 (BuyerMapper.xml에 insert쿼리 참조)
+					if (jfc.getSelectedFile() == null) {
+						SoftwareService.getInstance().updateItem(new Software(Integer.parseInt(tfNo.getText()),
+								cmbCategory.getSelectedItem() + "", tfTitle.getText().trim(),
+								Integer.parseInt(tfSupPrice.getText().trim()),
 								Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
-				JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
-				refresh(new SoftwareList());
+					} else {
+						SoftwareService.getInstance().updateItem(new Software(Integer.parseInt(tfNo.getText()),
+								cmbCategory.getSelectedItem() + "", tfTitle.getText().trim(),
+								Files.readAllBytes(new File(jfc.getSelectedFile().toString()).toPath()),
+								Integer.parseInt(tfSupPrice.getText().trim()),
+								Integer.parseInt(tfSellPrice.getText().trim()), cmbCoName.getSelectedItem() + ""));
+					}
+					JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				} finally {
+					refresh(new SoftwareList());
+				}
 			}
 			break;
-
 		case "취소":
 			refresh(new SoftwareList());
 			break;
@@ -263,6 +376,7 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 
 	@Override
 	public boolean inputValidation() {
+		// 빈칸 여부 검사
 		if (tfNo.getText().equals("") || tfTitle.getText().trim().equals("") || tfSupPrice.getText().trim().equals("")
 				|| tfSellPrice.getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(null, "빈칸없이 입력해 주세요");
@@ -274,13 +388,13 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 
 	@Override
 	public boolean duplicateValidation(String e) {
+		// 중복 여부 검사 list에 모든 제품명을 가져옴
 		List<Software> list = SoftwareService.getInstance().selectTitle();
 		boolean flag = true;
-
 		switch (e) {
-
 		case "등록":
 			for (Software s : list) {
+				// 입력받은 제품명을 list에 가져온 제품명들과 중복검사
 				if (tfTitle.getText().trim().equals(s.getTitle())) {
 					flag = false;
 					tfTitle.requestFocus();
@@ -289,16 +403,18 @@ public class SoftwareRegEdit extends JPanel implements ActionListener, RegEditIn
 				}
 			}
 			break;
-
 		case "수정":
+			// 선택한 항목, 자기자신의 제품명을 제외한 나머지 제품명을 담을 배열 생성
 			String[] title = new String[list.size()];
 			int idx = 0;
+			// 자기자신을 제외한 제품명을 list에서 가져와 title배열에 담기
 			for (Software s : list) {
 				if (s.getTitle().equals(selectedTitle) == false) {
 					title[idx] = s.getTitle();
 					idx++;
 				}
 			}
+			// title배열을 입력한 제품명과 비교하여 중복검사(최초선택된 자기자신의 제품명은 제외)
 			for (int i = 0; i < list.size() - 1; i++) {
 				if (title[i].equals(tfTitle.getText().trim())) {
 					flag = false;

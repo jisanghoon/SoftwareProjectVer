@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,15 +29,16 @@ import kr.or.dgit.bigdata.swmng.util.ModelForTable;
 public class BuyerList extends JPanel implements ActionListener, ListInterface {
 	private JTable buyerList;
 	private JPanel listPanel;
+	private JLabel listTitle;
 
 	public BuyerList() {
 		setLayout(new BorderLayout(0, 0));
 
-		JLabel listTitle = new JLabel("고객 목록");
+		listTitle = new JLabel("고객 목록");
 		listTitle.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		listTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		add(listTitle, BorderLayout.NORTH);
-		
+
 		listPanel = new JPanel();
 		listPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		add(listPanel, BorderLayout.CENTER);
@@ -78,6 +80,7 @@ public class BuyerList extends JPanel implements ActionListener, ListInterface {
 		BtnPanel.add(btnDel, gbc_btnDel);
 
 		createList();
+
 	}
 
 	@Override
@@ -129,26 +132,45 @@ public class BuyerList extends JPanel implements ActionListener, ListInterface {
 
 	@Override
 	public void createList() {
-		buyerList = new JTable();
 		List<Buyer> list = BuyerService.getInstance().selectAll();
-		String[] COL_NAMES = { "등록번호", "상호", "주소", "전화번호" };
-		String[][] data = new String[list.size()][COL_NAMES.length];
+		String[] COL_NAMES = { "등록번호", "상호", "주소", "전화번호", "고객사진" };
+		Object[][] data = new Object[list.size()][COL_NAMES.length];
 		int idx = 0;
 		for (Buyer b : list) {
 			data[idx][0] = b.getNo() + "";
 			data[idx][1] = b.getShopName();
 			data[idx][2] = b.getAddress();
 			data[idx][3] = b.getTel();
+			if (b.getPicPath() == null) {
+				data[idx][4] = "";
+			} else {
+				data[idx][4] = new ImageIcon(new ImageIcon((byte[]) b.getPicPath()).getImage().getScaledInstance(30, 30,
+						java.awt.Image.SCALE_SMOOTH));
+			}
+
 			idx++;
 		}
+		
+
 		ModelForTable mft = new ModelForTable(data, COL_NAMES);
-		buyerList.setModel(mft);
-		mft.tableCellAlignment(buyerList, SwingConstants.CENTER, 0, 3);
-		buyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		buyerList = new JTable(mft) {
+			public Class getColumnClass(int column) {
+				if (column == 4) {
+					return ImageIcon.class;
+				}
+				return String.class;
+			}
+		};
+		mft.resizeColumnHeight(buyerList);
 		mft.resizeColumnWidth(buyerList);
 		mft.tableHeaderAlignment(buyerList);
-		listPanel.add(new JScrollPane(buyerList));
+		mft.tableCellAlignment(buyerList, SwingConstants.CENTER, 0, 3);
+
+		buyerList.setModel(mft);
+		buyerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		buyerList.setFont(buyerList.getFont().deriveFont(12.0f));
+	
+		listPanel.add(new JScrollPane(buyerList));
 	}
 
 }

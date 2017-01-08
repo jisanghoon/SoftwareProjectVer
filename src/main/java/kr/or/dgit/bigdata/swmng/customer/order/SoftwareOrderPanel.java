@@ -164,6 +164,7 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 		gbc_lblPayment.gridy = 8;
 		orderPanel.add(lblPayment, gbc_lblPayment);
 
+		// 체크박스 선택여부에 따른 텍스트
 		ckbPayment = new JCheckBox("미입금");
 		ckbPayment.addItemListener(new ItemListener() {
 			@Override
@@ -215,6 +216,7 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 		gbc_btnClose.gridy = 0;
 		btnPanel.add(btnClose, gbc_btnClose);
 
+		// 상호명에 따른 제품명을 생성, 상호명콤보박스 값을 바꿀시마다 호출
 		cmbShopName.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -242,15 +244,17 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 	}
 
 	private void cancelAction() {
+		// 닫기 버튼 클릭시 메인화면 호출
 		setVisible(false);
 		JLabel lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		this.getParent().add(lblMainTitle,BorderLayout.CENTER);
+		this.getParent().add(lblMainTitle, BorderLayout.CENTER);
 		revalidate();
 	}
 
 	private void resetAction() {
+		// 리셋버튼 클릭시 모든항목 초기화
 		List<Buyer> shopNameList = BuyerService.getInstance().selectShopName();
 		for (Buyer s : shopNameList) {
 			cmbShopName.addItem(s.getShopName());
@@ -271,11 +275,14 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 	}
 
 	private void insertAction() {
+		// 입금 미입금 판단할 변수
 		boolean payment;
+		// 주문수량 빈칸 체크
 		if (tfOrderCount.getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(null, "주문수량을 확인해주세요");
 			tfOrderCount.requestFocus();
 			tfOrderCount.selectAll();
+			// 주문수량에 입력한 값이 숫자인이 체크
 		} else if (tfOrderCount.getText().trim().matches(".*\\D+.*")) {
 			JOptionPane.showMessageDialog(null, "숫자만 입력해 주세요");
 			tfOrderCount.requestFocus();
@@ -298,6 +305,7 @@ public class SoftwareOrderPanel extends JPanel implements ActionListener {
 	}
 
 	void createTitleList() {
+		// 상호명선택시 해당하는 제품명이 존재시 모두 지우고 선택한 상호명에 해당하는 제품명 가져오기
 		if (cmbTitle.getItemCount() > 0) {
 			cmbTitle.removeAllItems();
 		} else {

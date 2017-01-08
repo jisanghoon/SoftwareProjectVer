@@ -4,10 +4,31 @@ public class Software {
 	private int no;
 	private String category;
 	private String title;
+	private byte[] picPath;
 	private int supPrice;
 	private int sellPrice;
 	private Company coName;
 	private String coName2;
+	
+
+	public Software(int no, String category, String title, int supPrice, int sellPrice, String coName2) {
+		this.no = no;
+		this.category = category;
+		this.title = title;
+		this.supPrice = supPrice;
+		this.sellPrice = sellPrice;
+		this.coName2 = coName2;
+	}
+
+
+	public byte[] getPicPath() {
+		return picPath;
+	}
+
+
+	public void setPicPath(byte[] picPath) {
+		this.picPath = picPath;
+	}
 
 	@Override
 	public String toString() {
@@ -20,15 +41,16 @@ public class Software {
 		// TODO Auto-generated constructor stub
 	}
 
-
-
-	public Software(int no, String category, String title, int supPrice, int sellPrice, String coName2) {
+	public Software(int no, String category, String title, byte[] picPath, int supPrice, int sellPrice,
+			String coName2) {
 		this.no = no;
 		this.category = category;
 		this.title = title;
+		this.picPath = picPath;
 		this.supPrice = supPrice;
 		this.sellPrice = sellPrice;
 		this.coName2 = coName2;
+
 	}
 
 	public String getCoName2() {

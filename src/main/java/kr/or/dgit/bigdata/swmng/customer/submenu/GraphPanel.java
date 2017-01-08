@@ -57,7 +57,7 @@ public class GraphPanel extends JPanel {
 				JPanel contentPane = (JPanel) GraphPanel.this.getParent();
 				contentPane.add(lblMainTitle, BorderLayout.CENTER);
 				JFrame mainframe = (JFrame) contentPane.getParent().getParent().getParent();
-				mainframe.setSize( 600, 310);
+				mainframe.setSize(600, 530);
 
 			}
 		});

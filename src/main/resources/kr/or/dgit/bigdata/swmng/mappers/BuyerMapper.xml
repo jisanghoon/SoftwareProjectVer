@@ -9,19 +9,22 @@
 		<result property="shopName" column="shopName" />
 		<result property="address" column="address" />
 		<result property="tel" column="tel" />
+		<result property="picPath" column="picPath" />
 	</resultMap>
-	
+
 	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
 	<select id="selectAll" resultType="Buyer">
-		SELECT no,shopName,address,tel
+		SELECT
+		no,shopName,address,tel,picPath
 		FROM buyer order by no;
 	</select>
 	<select id="selectByNo" parameterType="int" resultType="Buyer">
 		SELECT
-		no,shopName,address,tel FROM buyer WHERE no = #{no}
+		no,shopName,address,tel,picPath FROM buyer WHERE no = #{no}
 	</select>
-		<select id="selectShopName" resultType="Buyer">
-		SELECT DISTINCT shopname FROM
+	<select id="selectShopName" resultType="Buyer">
+		SELECT DISTINCT shopname
+		FROM
 		buyer
 	</select>
 	<select id="selectMaxNo" parameterType="int" resultType="Buyer">
@@ -34,12 +37,23 @@
 	</delete>
 	<insert id="insertItem" parameterType="Buyer">
 		INSERT INTO buyer
-		VALUES(#{no},#{shopName},#{address},#{tel})
+		VALUES(#{no},#{shopName},#{address},#{tel},#{picPath})
 	</insert>
 	<update id="updateItem" parameterType="Buyer">
 		UPDATE buyer SET no=#{no},
-		shopName=#{shopName}, address= #{address}, tel= #{tel} WHERE no =
-		#{no}
+		shopName=#{shopName}, address= #{address},
+		tel= #{tel}
+		<choose>
+			<when test="picPath != null">
+				,picPath
+				=#{picPath} WHERE no =
+				#{no}
+			</when>
+			<otherwise>
+				WHERE no =
+				#{no}
+			</otherwise>
+		</choose>
 	</update>
 
 </mapper>

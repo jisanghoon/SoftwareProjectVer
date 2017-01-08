@@ -1,6 +1,7 @@
 package kr.or.dgit.bigdata.swmng.customer;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,10 +30,12 @@ public class CompanyRegEdit extends JPanel implements ActionListener, RegEditInt
 	private JButton btnAdd;
 	private JButton btnCancel;
 	private String selectedCoName;
+	private JLabel lblTitle;
 
 	public CompanyRegEdit(String e, int flag) {
-		setLayout(new BorderLayout(0, 0));
 
+		setLayout(new BorderLayout(0, 0));
+		
 		JPanel AddPanel = new JPanel();
 		add(AddPanel, BorderLayout.CENTER);
 		AddPanel.setBorder(new EmptyBorder(10, 5, 10, 5));
@@ -43,7 +46,7 @@ public class CompanyRegEdit extends JPanel implements ActionListener, RegEditInt
 		gbl_AddPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		AddPanel.setLayout(gbl_AddPanel);
 
-		JLabel lblTitle = new JLabel("공급회사 등록");
+		lblTitle = new JLabel("공급회사 등록");
 		lblTitle.setFont(new Font("돋움", Font.BOLD, 15));
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
 		gbc_lblTitle.gridwidth = 12;
@@ -150,8 +153,15 @@ public class CompanyRegEdit extends JPanel implements ActionListener, RegEditInt
 		gbc_btnCancel.gridy = 0;
 		BtnPanel.add(btnCancel, gbc_btnCancel);
 		if (e.equals("등록")) {
-			tfNo.setText(CompanyService.getInstance().selectMaxNo().getNo() + "");
+			lblTitle.setText("공급회사 등록");
+			try {
+				tfNo.setText(CompanyService.getInstance().selectMaxNo().getNo() + "");
+			} catch (NullPointerException e2) {
+				tfNo.setText("1");
+			}
+
 		} else if (e.equals("수정")) {
+			lblTitle.setText("공급회사 정보 수정");
 			updateAction(flag);
 		}
 

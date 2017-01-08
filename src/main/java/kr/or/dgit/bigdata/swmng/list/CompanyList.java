@@ -90,6 +90,7 @@ public class CompanyList extends JPanel implements ActionListener, ListInterface
 
 		switch (e.getActionCommand()) {
 		case "등록":
+			
 			refresh(new CompanyRegEdit(e.getActionCommand(), 0));
 			break;
 		case "수정":

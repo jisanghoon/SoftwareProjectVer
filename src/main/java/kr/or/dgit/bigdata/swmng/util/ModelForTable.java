@@ -11,10 +11,11 @@ import javax.swing.table.TableColumnModel;
 
 public class ModelForTable extends AbstractTableModel {
 
-	String[][] data;
+	Object[][] data;
 	String[] COL_NAMES;
 
-	public ModelForTable(String[][] data, String[] cOL_NAMES) {
+	// 테이블 모델
+	public ModelForTable(Object[][] data, String[] cOL_NAMES) {
 		this.data = data;
 		COL_NAMES = cOL_NAMES;
 	}
@@ -32,6 +33,19 @@ public class ModelForTable extends AbstractTableModel {
 		}
 	}
 
+	public void resizeColumnHeight(JTable table) {
+		for (int row = 0; row < table.getRowCount(); row++) {
+			int rowHeight = table.getRowHeight();
+
+			for (int column = 0; column < table.getColumnCount(); column++) {
+				Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
+				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+			}
+
+			table.setRowHeight(row, rowHeight);
+		}
+	}
+
 	public void tableCellAlignment(JTable table, int align, int... idx) {
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 		dtcr.setHorizontalAlignment(align);
@@ -40,11 +54,14 @@ public class ModelForTable extends AbstractTableModel {
 			model.getColumn(idx[i]).setCellRenderer(dtcr);
 		}
 	}
-	public void tableHeaderAlignment(JTable table){
+
+	public void tableHeaderAlignment(JTable table) {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getTableHeader().setDefaultRenderer(renderer);
+
 	}
+
 	@Override
 	public int getColumnCount() {
 		return COL_NAMES.length;

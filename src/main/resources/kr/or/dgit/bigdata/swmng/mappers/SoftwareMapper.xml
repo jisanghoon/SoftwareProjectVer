@@ -3,17 +3,19 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- DAO인터페이스 연결 -->
 <mapper namespace="kr.or.dgit.bigdata.swmng.mappers.SoftwareMapper">
+
+	<!-- 조인시 사용할 리절트맵 생성 -->
 	<resultMap type="Software" id="softwareResult">
 		<id property="no" column="no" />
 		<result property="category" column="category" />
 		<result property="title" column="title" />
+		<result property="picPath" column="picPath" />
 		<result property="supPrice" column="supPrice" />
 		<result property="sellPrice" column="sellPrice" />
 		<association property="coName"
 			resultMap="kr.or.dgit.bigdata.swmng.mappers.CompanyMapper.companyResult" />
 	</resultMap>
-
-	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
+	
 	<select id="selectAll" resultType="Software" resultMap="softwareResult">
 		SELECT
 		s.*, c.* FROM software s, company c
@@ -28,14 +30,17 @@
 	<select id="selectByNo" parameterType="int" resultType="Software"
 		resultMap="softwareResult">
 		SELECT
-		s.no,s.category,s.title,s.supPrice,s.sellPrice,c.coName FROM software
+		s.no,s.category,s.title,s.supPrice,s.sellPrice,c.coName,s.picpath FROM
+		software
 		s,company c WHERE c.coname = s.coname and s.no
 		=
 		#{no}
 	</select>
 	<select id="selectTitleJoinSale" resultType="Software">
-		SELECT DISTINCT sw.title FROM software sw,sale s WHERE sw.title=s.title AND
-		s.shopname = #{shopName}
+		SELECT DISTINCT
+		sw.title FROM software sw,sale s WHERE sw.title=s.title AND
+		s.shopname
+		= #{shopName}
 	</select>
 	<select id="selectMaxNo" parameterType="int" resultType="Software">
 		SELECT
@@ -49,8 +54,8 @@
 
 	<insert id="insertItem" parameterType="Software">
 		INSERT INTO
-		software(no,category,title,supprice,sellprice,coname)
-		VALUES(#{no},#{category},#{title},#{supPrice},#{sellPrice},#{coName2})
+		software(no,category,title,supprice,sellprice,coname,picpath)
+		VALUES(#{no},#{category},#{title},#{supPrice},#{sellPrice},#{coName2},#{picPath})
 	</insert>
 
 
@@ -59,10 +64,23 @@
 		no = #{no}
 	</delete>
 
-	<update id="updateItem" parameterType="Company"> UPDATE software SET
-		no=#{no}, category=#{category}, title= #{title}, supPrice=
-		#{supPrice},
-		sellPrice= #{sellPrice}, coName= #{coName2} WHERE no =
-		#{no}
+	<!-- 항목 수정시 이미지 파일 수정 없을시 기존 이미지 파일 보존 -->
+	<update id="updateItem" parameterType="Company">
+		UPDATE software SET
+		no=#{no}, category=#{category}, title= #{title},
+		supPrice=
+		#{supPrice}, sellPrice= #{sellPrice}, coName=
+		#{coName2}
+		<choose>
+			<when test="picPath != null">
+				,picPath
+				=#{picPath} WHERE no =
+				#{no}
+			</when>
+			<otherwise>
+				WHERE no =
+				#{no}
+			</otherwise>
+		</choose>
 	</update>
 </mapper>

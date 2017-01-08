@@ -44,12 +44,13 @@ public class SwMngMain extends JFrame implements ActionListener {
 	private JLabel lblMainTitle;
 
 	public static void main(String[] args) {
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+
 					SwMngMain frame = new SwMngMain();
+					// 커스텀 ui 적용
 					UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaAluOxideLookAndFeel");
 					SwingUtilities.updateComponentTreeUI(frame);
 					frame.setVisible(true);
@@ -57,17 +58,17 @@ public class SwMngMain extends JFrame implements ActionListener {
 					new GraphPanel();
 				} catch (Exception e) {
 					e.printStackTrace();
-				
+
 				}
 			}
 		});
-		
+
 	}
 
 	public SwMngMain() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(650, 350, 600, 310);
+		setBounds(650, 350, 650, 400);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -127,6 +128,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
+		// 메인화면 로고
 		lblMainTitle = new JLabel(new ImageIcon("src/img/logo.gif"));
 		lblMainTitle.setFont(new Font("굴림", Font.PLAIN, 20));
 		lblMainTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -136,9 +138,9 @@ public class SwMngMain extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	
+		// 각 메뉴 클릭시 메인패널내용 삭제후 해당메뉴 패널 추가
 		contentPane.removeAll();
-		setSize(600, 310);
+		setSize(650, 400);
 		switch (e.getActionCommand()) {
 		case "공급회사 목록":
 			contentPane.add(new CompanyList(), BorderLayout.CENTER);
@@ -164,7 +166,7 @@ public class SwMngMain extends JFrame implements ActionListener {
 			contentPane.add(new SalesStatusPanel2(), BorderLayout.CENTER);
 			break;
 		case "날짜별 판매현황":
-			contentPane.add(new SalesStatusPanel3(), BorderLayout.CENTER);	
+			contentPane.add(new SalesStatusPanel3(), BorderLayout.CENTER);
 			break;
 		case "소프트웨어 주문":
 			contentPane.add(new SoftwareOrderPanel(), BorderLayout.CENTER);
@@ -173,16 +175,6 @@ public class SwMngMain extends JFrame implements ActionListener {
 		revalidate();
 		repaint();
 
-	}
-
-	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
-		java.util.Enumeration keys = UIManager.getDefaults().keys();
-		while (keys.hasMoreElements()) {
-			Object key = keys.nextElement();
-			Object value = UIManager.get(key);
-			if (value != null && value instanceof javax.swing.plaf.FontUIResource)
-				UIManager.put(key, f);
-		}
 	}
 
 }

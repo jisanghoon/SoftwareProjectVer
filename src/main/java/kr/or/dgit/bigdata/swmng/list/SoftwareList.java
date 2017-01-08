@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -40,7 +41,7 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 		listTitle.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		listTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		add(listTitle, BorderLayout.NORTH);
-		
+
 		listPanel = new JPanel();
 		listPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		add(listPanel, BorderLayout.CENTER);
@@ -111,9 +112,11 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 
 		switch (e.getActionCommand()) {
 		case "등록":
+			// 등록버튼 클릭시 등록화면 호출
 			refresh(new SoftwareRegEdit(e.getActionCommand(), 0));
 			break;
 		case "수정":
+			// 테이블리스트에서 선택한 항목 있을시 수정화면 호출
 			if (softwareList.getSelectedRow() == -1) {
 				JOptionPane.showMessageDialog(null, "수정 할 항목을 선택해주세요");
 			} else {
@@ -122,7 +125,7 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 			}
 			break;
 		case "삭제":
-
+			// 테이블리스트에서 선택한 항목 있을시 선택한 데이터 삭제 컨펌후 삭제
 			if (softwareList.getSelectedRow() == -1) {
 				JOptionPane.showMessageDialog(null, "삭제 할 항목을 선택해주세요");
 			} else {
@@ -134,10 +137,10 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 
 	@Override
 	public void createList() {
-		softwareList = new JTable();
+		// 리스트 생성
 		List<Software> list = SoftwareService.getInstance().selectAll();
-		String[] COL_NAMES = { "품목번호", "분류명", "품목명", "공급가격", "판매가격", "공급회사명" };
-		String[][] data = new String[list.size()][COL_NAMES.length];
+		String[] COL_NAMES = { "품목번호", "분류명", "품목명", "공급가격", "판매가격", "공급회사명", "품목사진" };
+		Object[][] data = new Object[list.size()][COL_NAMES.length];
 		int idx = 0;
 		for (Software s : list) {
 			data[idx][0] = s.getNo() + "";
@@ -146,20 +149,43 @@ public class SoftwareList extends JPanel implements ActionListener, ListInterfac
 			data[idx][3] = String.format("%,d", s.getSupPrice());
 			data[idx][4] = String.format("%,d", s.getSellPrice());
 			data[idx][5] = s.getCoName().getCoName();
+			// 데이터베이스 이미지값이 없을시 공백으로 입력
+			if (s.getPicPath() == null) {
+				data[idx][6] = "";
+			} else {
+				// 이미지 있을시 30x30사이즈로 테이블 삽입
+				data[idx][6] = new ImageIcon(new ImageIcon((byte[]) s.getPicPath()).getImage().getScaledInstance(30, 30,
+						java.awt.Image.SCALE_SMOOTH));
+			}
+
 			idx++;
 		}
+		// 테이블 모델 생성
 		ModelForTable mft = new ModelForTable(data, COL_NAMES);
-		softwareList.setModel(mft);
-	
-		mft.tableCellAlignment(softwareList, SwingConstants.CENTER, 0, 1, 5);
-		mft.tableCellAlignment(softwareList, SwingConstants.RIGHT, 3, 4);
-		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		// 리스트별 내용에 따른 cell클래스 지정
+		softwareList = new JTable(mft) {
+			public Class getColumnClass(int column) {
+				if (column == 6) {
+					return ImageIcon.class;
+				}
+				return String.class;
+			}
+		};
+
+		mft.resizeColumnHeight(softwareList);
 		mft.resizeColumnWidth(softwareList);
 
 		mft.tableHeaderAlignment(softwareList);
 
-		listPanel.add(new JScrollPane(softwareList));
+		mft.tableCellAlignment(softwareList, SwingConstants.CENTER, 0, 1, 2, 3);
+		mft.tableCellAlignment(softwareList, SwingConstants.RIGHT, 4, 5);
+
+		softwareList.setModel(mft);
+		softwareList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		softwareList.setFont(softwareList.getFont().deriveFont(12.0f));
+
+		listPanel.add(new JScrollPane(softwareList));
 	}
 
 }

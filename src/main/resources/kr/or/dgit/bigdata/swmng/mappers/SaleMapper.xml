@@ -3,32 +3,57 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- DAO인터페이스 연결 -->
 <mapper namespace="kr.or.dgit.bigdata.swmng.mappers.SaleMapper">
-	<resultMap type="Sale" id="SaleResult">
+<!-- 
+<resultMap type="Sale" id="SaleResult">
 		<id property="no" column="no" />
+		<result property="shopName" column="shopName" />
+		<result property="title" column="title"/>
+		<result property="category" column="category"/>
 		<result property="orderCount" column="orderCount" />
 		<result property="payment" column="payment" />
 		<result property="date" column="date" />
-		<association property="shopName" javaType="Buyer"
-			resultMap="kr.or.dgit.bigdata.swmng.mappers.BuyerMapper.buyerResult" />
-		<association property="title"
-			resultMap="kr.or.dgit.bigdata.swmng.mappers.SoftwareMapper.softwareResult" />
-	</resultMap>
+		<result property="supPrice" column="supPrice" />
+		<result property="sellPrice" column="sellPrice" />
+		<result property="coName" column="coName" />
+</resultMap>
+ -->
+	<select id="selectBetweenDates" resultType="Sale">
+		SELECT no,shopName,title,orderCount,payment,date FROM sale
+		WHERE date &gt;= #{param1} and date &lt;=#{param2}
+		ORDER BY no
+	</select>
+	
+	<select id="selectAllSortDate" resultType="Sale">
+		SELECT date,category,title,no,orderCount,sellPrice FROM sale
+		ORDER BY date, no
+	</select>
+	
+	<select id="selectAllSortSupplier" resultType="Sale" >
+		SELECT coName,date,shopName,title,category,orderCount,supPrice
+		FROM sale ORDER BY coname,date
+	</select>
+	
+	<select id="selectAllGroupByConame" resultType="map">
+		SELECT shopName,
+		sum(orderCount) as totalCnt FROM sale
+		group by shopName
+	</select>
 
-	<!-- 쿼리문을 연결할 변수(ID)생성후 DTO(ID)와 연결 -->
-	<select id="selectAll" resultType="Sale" resultMap="SaleResult">
+	<!--
+	<select id="selectAll" resultType="Sale" >
 		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
 			= b.shopName and sa.title = so.title ORDER BY sa.no
 	</select>
-	<select id="selectAllOrderByCategory" resultType="Sale" resultMap="SaleResult">
+	<select id="selectAllOrderByCategory" resultType="Sale">
 		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
 			= b.shopName and sa.title = so.title ORDER BY so.category
 	</select>
-	<select id="selectAllOrderByTitle" resultType="Sale" resultMap="SaleResult">
+	<select id="selectAllOrderByTitle" resultType="Sale" >
 		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
 			= b.shopName and sa.title = so.title ORDER BY so.title
 	</select>
 	
-	<select id="selectAllOrderByBuyer" resultType="Sale" resultMap="SaleResult">
+	<select id="selectAllOrderByBuyer" resultType="Sale" >
 		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
 			= b.shopName and sa.title = so.title ORDER BY sa.shopname
 	</select>
@@ -37,7 +62,7 @@
 		MAX(no)+1 no FROM sale
 	</select>
 
-	<select id="selectAllSortDate" resultType="Sale" resultMap="SaleResult">
+	<select id="selectAllSortDate" resultType="Sale" >
 		SELECT
 		sa.*, so.*,b.* FROM sale sa,software so ,buyer b
 		WHERE
@@ -45,7 +70,7 @@
 		ORDER BY date, sa.no
 	</select>
 
-	<select id="selectAllSortSupplier" resultType="Sale" resultMap="SaleResult">
+	<select id="selectAllSortSupplier" resultType="Sale" >
 		SELECT
 		sa.*, so.*,b.* FROM sale sa,software so ,buyer b
 		WHERE
@@ -53,13 +78,9 @@
 		ORDER BY coname,date
 	</select>
 
-	<select id="selectAllGroupByConame" resultType="map">
-		SELECT shopName,
-		sum(orderCount) as totalCnt FROM sale
-		group by shopName
-	</select>
+	
 
-	<select id="selectBetweenDates" resultMap="SaleResult">
+	<select id="selectBetweenDates">
 		select sa.*, so.*,b.* FROM sale sa,software so ,buyer b
 		WHERE sa.shopName = b.shopName and sa.title = so.title	
 		and date &gt;= #{param1} and date &lt;=#{param2}
@@ -71,7 +92,7 @@
 		INSERT INTO
 		sale(no,shopname,title,ordercount,payment,date) VALUES(
 		#{no},#{shopName2},#{title2},#{orderCount},#{payment},#{date})
-	</insert>
+	</insert> -->
 	
 
 

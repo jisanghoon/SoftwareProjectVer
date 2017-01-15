@@ -5,64 +5,40 @@ import java.util.Date;
 
 public class Sale {
 	private int no;
-	private Buyer shopName;
-	private String shopName2;
-	private Software title;
-	private String title2;
+	private String shopName;
+	private String title;
 	private int orderCount;
 	private boolean payment;
 	private Date date;
-
+	private int supPrice;
+	private int sellPrice;
+	private String coName;
+	private String category;
 	
-	public Sale(int no, String shopName2, String title2, int orderCount, boolean payment, Date date) {
-		this.no = no;
-		this.shopName2 = shopName2;
-		this.title2 = title2;
-		this.orderCount = orderCount;
-		this.payment = payment;
-		this.date = date;
-	}
 
-	public String getShopName2() {
-		return shopName2;
-	}
-
-	public void setShopName2(String shopName2) {
-		this.shopName2 = shopName2;
-	}
-
-	public String getTitle2() {
-		return title2;
-	}
-
-	public void setTitle2(String title2) {
-		this.title2 = title2;
-	}
-
-
-	
 
 	@Override
 	public String toString() {
-		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		
-		return String.format("Sale [no=%s, shopName=%s, title=%s, orderCount=%s, payment=%s, date=%s]", no, shopName.getShopName(),
-				title.getTitle(), orderCount, payment, format.format(date));
+		return String.format("Sale [no=%s, shopName=%s, title=%s, orderCount=%s, payment=%s, date=%s]", no, shopName,
+				title, orderCount, payment, format.format(date));
 	}
 
-	public Sale(int no, Buyer shopName, Software title, int orderCount, boolean payment, Date date) {
+	public Sale(int no, String shopName, String title, int orderCount, boolean payment, Date date, int supPrice,
+			int sellPrice, String coName) {
 		this.no = no;
 		this.shopName = shopName;
 		this.title = title;
 		this.orderCount = orderCount;
 		this.payment = payment;
 		this.date = date;
+		this.supPrice = supPrice;
+		this.sellPrice = sellPrice;
+		this.coName = coName;
 	}
 
 	public Sale() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getNo() {
@@ -73,19 +49,27 @@ public class Sale {
 		this.no = no;
 	}
 
-	public Buyer getShopName() {
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getShopName() {
 		return shopName;
 	}
 
-	public void setShopName(Buyer shopName) {
+	public void setShopName(String shopName) {
 		this.shopName = shopName;
 	}
 
-	public Software getTitle() {
+	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(Software title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
@@ -112,5 +96,31 @@ public class Sale {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public int getSupPrice() {
+		return supPrice;
+	}
+
+	public void setSupPrice(int supPrice) {
+		this.supPrice = supPrice;
+	}
+
+	public int getSellPrice() {
+		return sellPrice;
+	}
+
+	public void setSellPrice(int sellPrice) {
+		this.sellPrice = sellPrice;
+	}
+
+	public String getCoName() {
+		return coName;
+	}
+
+	public void setCoName(String coName) {
+		this.coName = coName;
+	}
+
+
 
 }

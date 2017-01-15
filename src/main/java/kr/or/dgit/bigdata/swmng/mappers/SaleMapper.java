@@ -14,5 +14,5 @@ public interface SaleMapper<T> {
 	List<T> selectAllOrderByCategory();
 	List<T> selectAllOrderByTitle();
 	List<T> selectAllOrderByBuyer();
-	List<T> selectBetweenDates(Date former,Date latter);
+	List<T> selectBetweenDates(Date prev,Date next);
 }

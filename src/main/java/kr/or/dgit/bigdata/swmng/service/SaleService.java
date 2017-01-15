@@ -70,6 +70,17 @@ public class SaleService implements SaleMapper<Sale> {
 			sqlSession.close();
 		}
 	}
+	@Override
+	public List<Map<String, Object>> selectSalesOfEach() {
+		SqlSession sqlSession = MybatisSessionFactory.openSession();
+		SaleMapper saleDao = sqlSession.getMapper(SaleMapper.class);
+		try {
+			List<Map<String, Object>> returnList = saleDao.selectSalesOfEach();
+			return returnList;
+		} finally {
+			sqlSession.close();
+		}
+	}
 
 	@Override
 	public Sale selectMaxNo() {
@@ -172,6 +183,7 @@ public class SaleService implements SaleMapper<Sale> {
 			sqlSession.close();
 		}
 	}
+
 	
 }
 

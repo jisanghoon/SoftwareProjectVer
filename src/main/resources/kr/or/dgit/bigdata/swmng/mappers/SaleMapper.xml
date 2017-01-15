@@ -38,7 +38,9 @@
 		sum(orderCount) as totalCnt FROM sale
 		group by shopName
 	</select>
-
+	<select id="selectSalesOfEach" resultType="map">
+		select shopName,sum(m) as result from (select shopname,orderCount*sellPrice m from sale) temp group by shopName;
+	</select>
 	<!--
 	<select id="selectAll" resultType="Sale" >
 		SELECT sa.*, so.*,b.* FROM sale sa,software so ,buyer b WHERE sa.shopName 
